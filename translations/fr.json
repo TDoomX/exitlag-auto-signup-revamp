@@ -1,0 +1,71 @@
+{
+    "browser_path_prompt": "(RECOMMANDÉ) Appuyez sur Entrée pour utiliser le chemin du navigateur par défaut (si vous avez Chrome installé)",
+    "browser_path_info": "Si vous préférez utiliser un autre navigateur Chromium que Chrome, veuillez entrer son chemin exécutable ici. (par exemple : C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe)",
+    "supported_browsers": "Voici quelques navigateurs pris en charge qui ont été testés et peuvent être utilisés :",
+    "supported_browsers_list": "- Chrome\n- Brave",
+    "browser_executable_path": "Chemin du navigateur exécutable : ",
+    
+    "password_prompt": "(RECOMMANDÉ) Appuyez sur Entrée pour utiliser le mot de passe par défaut",
+    "password_info": "Si vous préférez utiliser votre propre mot de passe, assurez-vous qu'il remplit les critères ci-dessous :\n- Utilisez au moins 8 caractères\n- Utilisez une lettre minuscule\n- Utilisez une lettre majuscule\n- Utilisez au moins 1 caractère spécial (!@#$%...)\n- Utilisez au moins 1 chiffre",
+    "password_label": "Mot de passe :",
+    "random_password_generated": "Mot de passe aléatoire généré : {passw}\nVous pouvez également le trouver dans accounts.txt",
+  
+    "proxy_prompt": "Souhaitez-vous utiliser un proxy ?",
+    "proxy_info": "Veuillez entrer l'IP et le port du proxy au format IP:PORT (exemple : http://localhost:1080). Appuyez sur Entrée pour ignorer.",
+    "proxy_label": "Proxy",
+    
+    "number_of_accounts_prompt": "Nombre de comptes à générer (par défaut : 1) :",
+    
+    "exiting": "Sortie...",
+    "password_not_meeting_requirements": "Le mot de passe ne répond pas aux critères requis. Veuillez réessayer.",
+    "credentials_saved": "Identifiants enregistrés dans accounts.txt",
+    "have_fun_using_exitlag": "Amusez-vous bien avec ExitLag !",
+    "successfully_created_account": "Compte créé avec succès {x}/{executionCount}.",
+    "press_enter_to_exit": "Appuyez sur Entrée pour quitter...",
+    "done": "Terminé.",
+    
+    "clearing_cache_and_data": "Vider le cache et les données...",
+    "error_fill_form": "Erreur lors du remplissage du formulaire: {e}",
+    "signup_process": "Démarrage du processus d'inscription...",
+    
+    "failed_load_registration_page": "Échec du chargement de la page d'inscription.",
+    "account_generation_process": "Démarrage du processus de génération de comptes...",
+    
+    "initial_setup_completed": "Configuration initiale terminée !",
+    "invalid_number": "Numéro invalide. Veuillez réessayer.",
+    "invalid_path": "Chemin invalide. Veuillez réessayer.",
+    
+    "plan_selection_title": "Choisissez un plan :",
+    "plan_option_3days": "3 jours",
+    "plan_option_7days": "7 jours",
+    "plan_input_prompt": "Entrez votre choix (1/2) :",
+    
+    "registration_success": "✓ Inscription terminée avec succès !",
+    
+    "file_email_label": "Email : {email}",
+    "file_password_label": "Mot de passe : {password}",
+    "file_date_created_label": "Date de création : {timestamp}",
+	"captcha_failed": "Le captcha a échoué",
+	"filling_form": "Remplissage du formulaire...",
+	"waiting_captcha": "En attente du captcha...",
+	"submitting_form": "Envoi du formulaire...",
+	"waiting_next_account": "En attente {delay:.0f}s avant le compte suivant...",
+	"error": "Erreur",
+	
+	"checking_updates": "Vérification des mises à jour...",
+
+	"use_last_config_prompt": "Souhaitez-vous utiliser la dernière configuration ?",
+	"last_config_found": "Dernière configuration trouvée !",
+	"browser_label": "Navigateur : ",
+	"password_label_display": "Mot de passe : ",
+	"proxy_label_display": "Proxy : ",
+	"accounts_label": "Comptes : ",
+	"plan_label": "Plan : ",
+	"default_browser": "Par défaut",
+	"no_proxy": "Aucun",
+	"three_days": "3 jours",
+	"seven_days": "7 jours",
+	"accounts_created": "Comptes créés :",
+	"email_label": "Email :",
+	"password_display_label": "Mot de passe :"
+}

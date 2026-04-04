@@ -1,0 +1,71 @@
+{
+    "browser_path_prompt": "(RECOMENDADO) Presione Enter para usar la ruta predeterminada del navegador (si tiene Chrome instalado)",
+    "browser_path_info": "Si prefiere usar otro navegador Chromium que no sea Chrome, ingrese su ruta ejecutable aquí. (por ejemplo: C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe)",
+    "supported_browsers": "Estos son algunos navegadores compatibles que han sido probados y son utilizables:",
+    "supported_browsers_list": "- Chrome\n- Brave",
+    "browser_executable_path": "Ruta ejecutable del navegador: ",
+    
+    "password_prompt": "(RECOMENDADO) Presione Enter para usar la contraseña predeterminada",
+    "password_info": "Si prefiere usar su propia contraseña, asegúrese de que cumpla con los siguientes requisitos:\n- Use al menos 8 caracteres\n- Use una letra minúscula\n- Use una letra mayúscula\n- Use al menos 1 carácter especial (!@#$%...)\n- Use al menos 1 número",
+    "password_label": "Contraseña:",
+    "random_password_generated": "Contraseña generada aleatoriamente: {passw}\nTambién puede encontrarla en accounts.txt",
+  
+    "proxy_prompt": "¿Le gustaría usar un proxy?",
+    "proxy_info": "Ingrese la IP y el puerto del proxy en el formato IP:PORT (Ejemplo: http://localhost:1080). Presione Enter para omitir.",
+    "proxy_label": "Proxy",
+    
+    "number_of_accounts_prompt": "Número de cuentas a generar (Predeterminado: 1):",
+    
+    "exiting": "Saliendo...",
+    "password_not_meeting_requirements": "La contraseña no cumple con los requisitos. Por favor, intente de nuevo.",
+    "credentials_saved": "Credenciales guardadas en accounts.txt",
+    "have_fun_using_exitlag": "¡Diviértete usando ExitLag!",
+    "successfully_created_account": "Cuenta creada con éxito {x}/{executionCount}.",
+    "press_enter_to_exit": "Presione Enter para salir...",
+    "done": "Hecho.",
+    
+    "clearing_cache_and_data": "Borrando caché y datos...",
+    "error_fill_form": "Error al completar el formulario: {e}",
+    "signup_process": "Iniciando proceso de registro...",
+    
+    "failed_load_registration_page": "No se pudo cargar la página de registro.",
+    "account_generation_process": "Iniciando el proceso de generación de cuentas...",
+    
+    "initial_setup_completed": "¡Configuración inicial completada!",
+    "invalid_number": "Número inválido. Intenta de nuevo.",
+    "invalid_path": "Ruta inválida. Intenta de nuevo.",
+    
+    "plan_selection_title": "Elige un plan:",
+    "plan_option_3days": "3 días",
+    "plan_option_7days": "7 días",
+    "plan_input_prompt": "Ingrese su elección (1/2):",
+    
+    "registration_success": "✓ ¡Registro completado con éxito!",
+    
+    "file_email_label": "Correo: {email}",
+    "file_password_label": "Contraseña: {password}",
+    "file_date_created_label": "Fecha de creación: {timestamp}",
+	"captcha_failed": "Captcha falló",
+	"filling_form": "Rellenando formulario...",
+	"waiting_captcha": "Esperando captcha...",
+	"submitting_form": "Enviando formulario...",
+	"waiting_next_account": "Esperando {delay:.0f}s antes de la siguiente cuenta...",
+	"error": "Error",
+	
+	"checking_updates": "Buscando actualizaciones...",
+
+	"use_last_config_prompt": "¿Te gustaría usar la última configuración?",
+	"last_config_found": "¡Se encontró la última configuración!",
+	"browser_label": "Navegador: ",
+	"password_label_display": "Contraseña: ",
+	"proxy_label_display": "Proxy: ",
+	"accounts_label": "Cuentas: ",
+	"plan_label": "Plan: ",
+	"default_browser": "Predeterminado",
+	"no_proxy": "Ninguno",
+	"three_days": "3 días",
+	"seven_days": "7 días",
+	"accounts_created": "Cuentas creadas:",
+	"email_label": "Correo:",
+	"password_display_label": "Contraseña:"
+}

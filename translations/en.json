@@ -1,0 +1,68 @@
+{
+    "checking_updates": "Checking for updates...",
+    "browser_path_prompt": "(RECOMMENDED) Press enter in order to use the default browser path (If you have Chrome installed)",
+    "browser_path_info": "If you prefer to use other Chromium browser other than Chrome, please enter its executable path here.\n(e.g: C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe)",
+    "supported_browsers": "Here are some supported browsers that are tested and able to use:",
+    "supported_browsers_list": "- Chrome\n- Brave",
+    "browser_executable_path": "Browser executable path: ",
+
+    "password_prompt": "(RECOMMENDED) Press enter in order to use the default password",
+    "password_info": "If you prefer to use your own password, do make sure that your password fulfill the below requirements:\n- Use at least 8 characters\n- Use a lowercase letter\n- Use an uppercase letter\n- Use at least 1 special character (!@#$%...)\n- Use at least 1 number",
+    "password_label": "Password:",
+    "random_password_generated": "Random password generated: {passw}\nYou can also find it in accounts.txt",
+
+    "proxy_prompt": "Would you like to use a proxy?",
+    "proxy_info": "Please enter the proxy IP and port in the format of IP:PORT (Example: http://localhost:1080). Press enter to skip.",
+    "proxy_label": "Proxy",
+
+    "number_of_accounts_prompt": "Number of accounts to generate (Default: 1):",
+
+    "exiting": "Exiting...",
+    "password_not_meeting_requirements": "Password does not meet the required criteria. Please try again.",
+    "credentials_saved": "Credentials saved to accounts.txt",
+    "have_fun_using_exitlag": "Have fun using ExitLag!",
+    "successfully_created_account": "Successfully created account(s) {x}/{executionCount}.",
+    "press_enter_to_exit": "Press Enter to exit...",
+    "done": "Done.",
+
+    "clearing_cache_and_data": "Clearing cache and data...",
+    "error_fill_form": "Error filling the form: {e}",
+    "signup_process": "Starting sign-up process...",
+    "failed_load_registration_page": "Failed to load the registration page.",
+    "account_generation_process": "Starting account generation process...",
+    "initial_setup_completed": "Initial setup completed!",
+    "invalid_number": "Invalid number. Please try again.",
+    "invalid_path": "Invalid path. Please try again.",
+
+    "plan_selection_title": "Choose the plan:",
+    "plan_option_3days": "3 days",
+    "plan_option_7days": "7 days",
+    "plan_input_prompt": "Enter your choice (1/2): ",
+
+    "registration_success": "✓ Registration completed successfully!",
+
+    "file_email_label": "Email: {email}",
+    "file_password_label": "Password: {password}",
+    "file_date_created_label": "Date created: {timestamp}",
+    "captcha_failed": "Captcha failed",
+    "filling_form": "Filling form...",
+    "waiting_captcha": "Waiting for captcha...",
+    "submitting_form": "Submitting form...",
+    "waiting_next_account": "Waiting {delay:.0f}s before next account...",
+    "error": "Error",
+	
+	"use_last_config_prompt": "Would you like to use the last configuration?",
+	"last_config_found": "Last configuration found!",
+	"browser_label": "Browser: ",
+	"password_label_display": "Password: ",
+	"proxy_label_display": "Proxy: ",
+	"accounts_label": "Accounts: ",
+	"plan_label": "Plan: ",
+	"default_browser": "Default",
+	"no_proxy": "None",
+	"three_days": "3 days",
+	"seven_days": "7 days",
+	"accounts_created": "Accounts created:",
+	"email_label": "Email:",
+	"password_display_label": "Password:"
+}

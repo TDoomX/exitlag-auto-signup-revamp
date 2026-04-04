@@ -1,0 +1,7 @@
+DrissionPage==4.1.0.14
+tqdm==4.66.3
+rich==13.8.0
+faker==25.2.0
+pyperclip==1.8.2
+pydoll-python
+playwright

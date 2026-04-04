@@ -1,0 +1,70 @@
+{
+    "checking_updates": "Проверка обновлений...",
+    "browser_path_prompt": "(РЕКОМЕНДУЕТСЯ) Нажмите Enter, чтобы использовать путь браузера по умолчанию (если у вас установлен Chrome)",
+    "browser_path_info": "Если вы предпочитаете использовать другой Chromium браузер, а не Chrome, введите путь к его исполнимому файлу здесь. (например: C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe)",
+    "supported_browsers": "Вот некоторые поддерживаемые браузеры, которые были протестированы и могут быть использованы:",
+    "supported_browsers_list": "- Chrome\n- Brave",
+    "browser_executable_path": "Путь к исполнимому файлу браузера: ",
+    
+    "password_prompt": "(РЕКОМЕНДУЕТСЯ) Нажмите Enter, чтобы использовать стандартный пароль",
+    "password_info": "Если вы предпочитаете использовать свой собственный пароль, убедитесь, что он соответствует следующим требованиям:\n- Используйте минимум 8 символов\n- Используйте строчную букву\n- Используйте заглавную букву\n- Используйте хотя бы 1 специальный символ (!@#$%...)\n- Используйте хотя бы 1 цифру",
+    "password_label": "Пароль:",
+    "random_password_generated": "Сгенерирован случайный пароль: {passw}\nВы также можете найти его в accounts.txt",
+  
+    "proxy_prompt": "Хотите использовать прокси?",
+    "proxy_info": "Введите IP-адрес и порт прокси в формате IP:PORT (Пример: http://localhost:1080). Нажмите Enter, чтобы пропустить.",
+    "proxy_label": "Прокси",
+    
+    "number_of_accounts_prompt": "Количество аккаунтов для генерации (По умолчанию: 1):",
+    
+    "exiting": "Выход...",
+    "password_not_meeting_requirements": "Пароль не соответствует требованиям. Пожалуйста, попробуйте снова.",
+    "credentials_saved": "Учетные данные сохранены в accounts.txt",
+    "have_fun_using_exitlag": "Удачи в использовании ExitLag!",
+    "successfully_created_account": "Аккаунт успешно создан {x}/{executionCount}.",
+    "press_enter_to_exit": "Нажмите Enter, чтобы выйти...",
+    "done": "Готово.",
+    
+    "clearing_cache_and_data": "Очистка кэша и данных...",
+    "error_fill_form": "Ошибка при заполнении формы: {e}",
+    "signup_process": "Запуск процесса регистрации...",
+    
+    "failed_load_registration_page": "Не удалось загрузить страницу регистрации.",
+    "account_generation_process": "Запуск процесса создания аккаунтов...",
+    
+    "initial_setup_completed": "Начальная настройка завершена!",
+    "invalid_number": "Неверный номер. Попробуйте снова.",
+    "invalid_path": "Неверный путь. Попробуйте снова.",
+    
+    "plan_selection_title": "Выберите план:",
+    "plan_option_3days": "3 дня",
+    "plan_option_7days": "7 дней",
+    "plan_input_prompt": "Введите ваш выбор (1/2):",
+    
+    "registration_success": "✓ Регистрация успешно завершена!",
+    
+    "file_email_label": "Email: {email}",
+    "file_password_label": "Пароль: {password}",
+    "file_date_created_label": "Дата создания: {timestamp}",
+    "captcha_failed": "Captcha не прошла",
+    "filling_form": "Заполнение формы...",
+    "waiting_captcha": "Ожидание captcha...",
+    "submitting_form": "Отправка формы...",
+    "waiting_next_account": "Ожидание {delay:.0f}s перед следующей учетной записью...",
+    "error": "Ошибка",
+	
+	"use_last_config_prompt": "Хотите использовать последнюю конфигурацию?",
+	"last_config_found": "Найдена последняя конфигурация!",
+	"browser_label": "Браузер: ",
+	"password_label_display": "Пароль: ",
+	"proxy_label_display": "Прокси: ",
+	"accounts_label": "Аккаунты: ",
+	"plan_label": "План: ",
+	"default_browser": "По умолчанию",
+	"no_proxy": "Нет",
+	"three_days": "3 дня",
+	"seven_days": "7 дней",
+	"accounts_created": "Созданные аккаунты:",
+	"email_label": "Email:",
+	"password_display_label": "Пароль:"
+}

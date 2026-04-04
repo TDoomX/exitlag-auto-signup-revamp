@@ -1,0 +1,24 @@
+# Runtime
+accounts.txt
+last_config.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Ambientes virtuais
+venv/
+.env/
+env/
+
+# Misc
+.playwright_installed
+*.log
