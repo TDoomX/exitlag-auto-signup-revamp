@@ -18,6 +18,12 @@ A tool to automate account creation on ExitLag, with support for multiple plans,
 
 ## Installation
 
+### Option A — Executable (no Python required)
+
+Download the latest release zip from the [Releases](https://github.com/TDoomX/exitlag-auto-signup-revamp/releases) page, extract everything and run `mainrev.exe` directly. No dependencies needed.
+
+### Option B — Run from source
+
 **1. Clone the repository:**
 ```shell
 git clone https://github.com/TDoomX/exitlag-auto-signup-revamp
@@ -26,7 +32,6 @@ git clone https://github.com/TDoomX/exitlag-auto-signup-revamp
 **2. Install dependencies:**
 ```shell
 pip install -r requirements.txt
-playwright install
 ```
 
 **3. Run:**
@@ -37,7 +42,7 @@ python main.py
 ## Usage
 
 On startup, the script will prompt for:
-- Browser path (Chrome or Brave)
+- Browser path (Chrome or Brave or any chromium-based browser)
 - Password (or generates one randomly)
 - Proxy (optional)
 - Number of accounts to create
@@ -51,4 +56,4 @@ Portuguese, English, Spanish, French, German, Italian, Russian
 
 ## Author
 
-Doom — https://github.com/TDoomX
+Doom — [![Discord](https://img.shields.io/discord/1452848560910368933?label=Discord&logo=discord&color=5865F2)](https://discord.gg/WT5MNusUDX)
