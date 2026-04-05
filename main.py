@@ -166,9 +166,29 @@ def check_for_updates():
             if os.path.exists(new_exe):
                 if os.path.exists(old_exe):
                     os.remove(old_exe)
-                os.rename(exe_path, old_exe)
-                os.rename(new_exe, exe_path)
-            ctypes.windll.shell32.ShellExecuteW(None, "open", exe_path, None, None, 1)
+            os.rename(exe_path, old_exe)
+            os.rename(new_exe, exe_path)
+
+            # TROCA: os.startfile → subprocess.Popen com DETACHED
+            subprocess.Popen(
+                [exe_path],
+                creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_CONSOLE,
+                close_fds=True
+            )
+
+            if os.path.exists(old_exe):
+                bat_path = os.path.join(base, "cleanup.bat")
+                with open(bat_path, "w") as f:
+                    f.write(
+                        f'@echo off\r\n'
+                        f'timeout /t 5 /nobreak > nul\r\n'
+                        f'del /f /q "{old_exe}"\r\n'
+                        f'del /f /q "%~f0"\r\n'
+                    )
+                subprocess.Popen(
+                    ["cmd", "/c", bat_path],
+                    creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_CONSOLE
+                )
         except Exception as e:
             console.print(f"[red]Erro ao reabrir: {e}[/red]")
             if os.path.exists(old_exe) and not os.path.exists(exe_path):
@@ -663,4 +683,5 @@ async def main():
 
 
 if __name__ == "__main__":
+    asyncio.run(main())
     asyncio.run(main())
