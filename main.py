@@ -7,13 +7,13 @@ import sys
 import json
 import urllib.request
 import subprocess
+import ctypes
 
 from tqdm import tqdm
 from tqdm import TqdmExperimentalWarning
 from pydoll.browser import Chrome
 from pydoll.browser.options import ChromiumOptions
 from pydoll.constants import Key
-from DrissionPage import Chromium, ChromiumOptions as DrissionOptions
 from lib.lib import Main
 from rich.console import Console
 from faker import Faker
@@ -72,6 +72,13 @@ def download_file(url, dest_path):
 def check_for_updates():
     console.print(f"[cyan]Verificando atualizações...[/cyan]")
 
+    old_exe = os.path.join(get_base(), "mainrev_old.exe")
+    if os.path.exists(old_exe):
+        try:
+            os.remove(old_exe)
+        except Exception:
+            pass
+
     remote_version = get_remote_version()
     if remote_version is None:
         console.print(f"[yellow]Não foi possível verificar atualizações. Continuando...[/yellow]")
@@ -97,8 +104,8 @@ def check_for_updates():
     # Baixar main.exe (somente se estiver rodando como .exe)
     if getattr(sys, 'frozen', False):
         console.print(f"[cyan]Baixando mainrev.exe...[/cyan]")
-        exe_path = os.path.join(base, "mainrev.exe")
-        ok = download_file("https://github.com/TDoomX/exitlag-auto-signup-revamp/releases/latest/download/mainrev.exe", exe_path)
+        new_exe_path = os.path.join(base, "mainrev_new.exe")
+        ok = download_file("https://github.com/TDoomX/exitlag-auto-signup-revamp/releases/latest/download/mainrev.exe", new_exe_path)
         if not ok:
             success = False
 
@@ -128,12 +135,44 @@ def check_for_updates():
         console.print(f"\n[bold red]Alguns arquivos não puderam ser baixados. Continuando com a versão atual.[/bold red]")
         return
 
-    console.print(f"\n[bold green]✓ Atualização concluída! Reiniciando...[/bold green]")
-    time.sleep(2)
+    console.print(f"\n[bold green]✓ Atualização concluída![/bold green]")
+    console.print(f"[bold yellow]Esta janela irá fechar e o programa abrirá novamente automaticamente.[/bold yellow]")
+    console.print(f"[dim]Pressione Enter para pular a contagem.[/dim]\n")
+
+    import threading
+    skip = threading.Event()
+
+    def wait_for_enter():
+        input()
+        skip.set()
+
+    t = threading.Thread(target=wait_for_enter, daemon=True)
+    t.start()
+
+    for i in range(5, 0, -1):
+        if skip.is_set():
+            break
+        console.print(f"[cyan]Reabrindo em {i}s...[/cyan]", end="\r")
+        time.sleep(1)
+
+    console.print()
 
     # Reiniciar
     if getattr(sys, 'frozen', False):
-        subprocess.Popen([sys.executable])
+        exe_path = os.path.join(base, "mainrev.exe")
+        old_exe = os.path.join(base, "mainrev_old.exe")
+        new_exe = os.path.join(base, "mainrev_new.exe")
+        try:
+            if os.path.exists(new_exe):
+                if os.path.exists(old_exe):
+                    os.remove(old_exe)
+                os.rename(exe_path, old_exe)
+                os.rename(new_exe, exe_path)
+            ctypes.windll.shell32.ShellExecuteW(None, "open", exe_path, None, None, 1)
+        except Exception as e:
+            console.print(f"[red]Erro ao reabrir: {e}[/red]")
+            if os.path.exists(old_exe) and not os.path.exists(exe_path):
+                os.rename(old_exe, exe_path)
     else:
         subprocess.Popen([sys.executable, os.path.join(base, "main.py")])
 
@@ -522,8 +561,6 @@ async def main():
     check_for_updates()
 
     lib = Main()
-    co = DrissionOptions()
-    co.incognito().auto_port().mute(True)
 
     last_config = load_config()
     
@@ -541,19 +578,16 @@ async def main():
         
         use_last = input(tr("use_last_config_prompt")).strip().lower()
         
-        if use_last == 'y':
+        if use_last in ('y', 's', 'o', 'j', 'д'):
             browserPath = last_config.get('browser_path', '')
             passw = last_config.get('password', '')
             proxyUsage = last_config.get('proxy', '')
             executionCount = last_config.get('execution_count', 1)
             escolha_plano = last_config.get('plan', '1')
             
-            if browserPath and os.path.exists(browserPath):
-                co.set_browser_path(browserPath)
-            
             if proxyUsage:
                 if lib.testProxy(proxyUsage)[0]:
-                    co.set_proxy(proxyUsage)
+                    pass
         else:
             last_config = None
     
@@ -568,7 +602,6 @@ async def main():
             ).replace('"', '').replace("'", '')
             if browserPath != "":
                 if os.path.exists(browserPath):
-                    co.set_browser_path(browserPath)
                     break
                 else:
                     console.print(f"[bold red]{tr('invalid_path')}[/bold red]")
@@ -605,9 +638,7 @@ async def main():
                     console.print(f"[bold red]{tr('invalid_number')}[/bold red]")
 
         if proxyUsage != "":
-            if lib.testProxy(proxyUsage)[0]:
-                co.set_proxy(proxyUsage)
-            else:
+            if not lib.testProxy(proxyUsage)[0]:
                 console.print(lib.testProxy(proxyUsage)[1])
 
         fake = Faker()
