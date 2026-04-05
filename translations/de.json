@@ -55,5 +55,20 @@
     "seven_days": "7 Tage",
     "accounts_created": "Erstellte Konten:",
     "email_label": "E-Mail:",
-    "password_display_label": "Passwort:"
+    "password_display_label": "Passwort:",
+    "update_check_failed": "Updates konnten nicht überprüft werden. Weiter...",
+    "up_to_date": "Sie verwenden die neueste Version ({local_version}).",
+    "update_available": "⚡ Update verfügbar!",
+    "current_version": "  Aktuelle Version:  {local_version}",
+    "new_version": "  Neue Version:      {remote_version}",
+    "update_downloading": "Das Programm lädt das Update herunter, schließt sich und öffnet sich automatisch.",
+    "update_dont_close": "Schließen Sie das Terminal nicht während des Vorgangs.",
+    "downloading_exe": "Lade mainrev.exe herunter...",
+    "downloading_main": "Lade main.py herunter...",
+    "downloading_translation": "Lade translations/{lang}.json herunter...",
+    "update_partial_fail": "Einige Dateien konnten nicht heruntergeladen werden. Weiter mit der aktuellen Version.",
+    "update_complete": "✓ Update abgeschlossen!",
+    "update_reopening": "Dieses Fenster wird geschlossen und das Programm öffnet sich automatisch neu.",
+    "update_skip_countdown": "Drücken Sie Enter, um den Countdown zu überspringen.",
+    "update_countdown": "Neu öffnen in {i}s..."
 }

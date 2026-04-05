@@ -55,5 +55,20 @@
     "seven_days": "7 jours",
     "accounts_created": "Comptes créés :",
     "email_label": "Email :",
-    "password_display_label": "Mot de passe :"
+    "password_display_label": "Mot de passe :",
+    "update_check_failed": "Impossible de vérifier les mises à jour. Continuation...",
+    "up_to_date": "Vous utilisez la dernière version ({local_version}).",
+    "update_available": "⚡ Mise à jour disponible !",
+    "current_version": "  Version actuelle :  {local_version}",
+    "new_version": "  Nouvelle version :  {remote_version}",
+    "update_downloading": "Le programme va télécharger la mise à jour, se fermer et se rouvrir automatiquement.",
+    "update_dont_close": "Ne fermez pas le terminal pendant le processus.",
+    "downloading_exe": "Téléchargement de mainrev.exe...",
+    "downloading_main": "Téléchargement de main.py...",
+    "downloading_translation": "Téléchargement de translations/{lang}.json...",
+    "update_partial_fail": "Certains fichiers n'ont pas pu être téléchargés. Continuation avec la version actuelle.",
+    "update_complete": "✓ Mise à jour terminée !",
+    "update_reopening": "Cette fenêtre va se fermer et le programme va se rouvrir automatiquement.",
+    "update_skip_countdown": "Appuyez sur Entrée pour ignorer le compte à rebours.",
+    "update_countdown": "Réouverture dans {i}s..."
 }

@@ -55,5 +55,20 @@
     "seven_days": "7 дней",
     "accounts_created": "Созданные аккаунты:",
     "email_label": "Email:",
-    "password_display_label": "Пароль:"
+    "password_display_label": "Пароль:",
+    "update_check_failed": "Не удалось проверить обновления. Продолжение...",
+    "up_to_date": "У вас последняя версия ({local_version}).",
+    "update_available": "⚡ Доступно обновление!",
+    "current_version": "  Текущая версия:  {local_version}",
+    "new_version": "  Новая версия:    {remote_version}",
+    "update_downloading": "Программа загрузит обновление, закроется и снова откроется автоматически.",
+    "update_dont_close": "Не закрывайте терминал во время процесса.",
+    "downloading_exe": "Загрузка mainrev.exe...",
+    "downloading_main": "Загрузка main.py...",
+    "downloading_translation": "Загрузка translations/{lang}.json...",
+    "update_partial_fail": "Некоторые файлы не удалось загрузить. Продолжение с текущей версией.",
+    "update_complete": "✓ Обновление завершено!",
+    "update_reopening": "Это окно закроется и программа откроется автоматически.",
+    "update_skip_countdown": "Нажмите Enter, чтобы пропустить обратный отсчёт.",
+    "update_countdown": "Повторное открытие через {i}s..."
 }

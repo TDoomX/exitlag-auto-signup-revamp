@@ -55,5 +55,20 @@
     "seven_days": "7 days",
     "accounts_created": "Accounts created:",
     "email_label": "Email:",
-    "password_display_label": "Password:"
+    "password_display_label": "Password:",
+    "update_check_failed": "Could not check for updates. Continuing...",
+    "up_to_date": "You are on the latest version ({local_version}).",
+    "update_available": "⚡ Update available!",
+    "current_version": "  Current version:  {local_version}",
+    "new_version": "  New version:      {remote_version}",
+    "update_downloading": "The program will download the update, close and reopen automatically.",
+    "update_dont_close": "Do not close the terminal during the process.",
+    "downloading_exe": "Downloading mainrev.exe...",
+    "downloading_main": "Downloading main.py...",
+    "downloading_translation": "Downloading translations/{lang}.json...",
+    "update_partial_fail": "Some files could not be downloaded. Continuing with the current version.",
+    "update_complete": "✓ Update complete!",
+    "update_reopening": "This window will close and the program will reopen automatically.",
+    "update_skip_countdown": "Press Enter to skip the countdown.",
+    "update_countdown": "Reopening in {i}s..."
 }

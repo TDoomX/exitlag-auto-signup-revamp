@@ -71,7 +71,7 @@ def download_file(url, dest_path):
 
 
 def check_for_updates():
-    console.print(f"[cyan]Verificando atualizações...[/cyan]")
+    console.print(f"[cyan]{tr('checking_updates')}[/cyan]")
 
     old_exe = os.path.join(get_base(), "mainrev_old.exe")
     if os.path.exists(old_exe):
@@ -82,41 +82,41 @@ def check_for_updates():
 
     remote_version = get_remote_version()
     if remote_version is None:
-        console.print(f"[yellow]Não foi possível verificar atualizações. Continuando...[/yellow]")
+        console.print(f"[yellow]{tr('update_check_failed')}[/yellow]")
         return
 
     local_version = get_local_version()
 
     if remote_version == local_version:
-        console.print(f"[green]Você está na versão mais recente ({local_version}).[/green]")
+        console.print(f"[green]{tr('up_to_date').format(local_version=local_version)}[/green]")
         return
 
     console.print(f"\n[bold cyan]{'='*50}[/bold cyan]")
-    console.print(f"[bold yellow]⚡ Atualização disponível![/bold yellow]")
-    console.print(f"[cyan]  Versão atual:  {local_version}[/cyan]")
-    console.print(f"[cyan]  Nova versão:   {remote_version}[/cyan]")
+    console.print(f"[bold yellow]{tr('update_available')}[/bold yellow]")
+    console.print(f"[cyan]{tr('current_version').format(local_version=local_version)}[/cyan]")
+    console.print(f"[cyan]{tr('new_version').format(remote_version=remote_version)}[/cyan]")
     console.print(f"[bold cyan]{'='*50}[/bold cyan]")
-    console.print(f"[yellow]O programa irá baixar a atualização, fechar e reabrir automaticamente.[/yellow]")
-    console.print(f"[yellow]Não feche o terminal durante o processo.[/yellow]\n")
+    console.print(f"[yellow]{tr('update_downloading')}[/yellow]")
+    console.print(f"[yellow]{tr('update_dont_close')}[/yellow]\n")
 
     base = get_base()
     success = True
 
     if getattr(sys, 'frozen', False):
-        console.print(f"[cyan]Baixando mainrev.exe...[/cyan]")
+        console.print(f"[cyan]{tr('downloading_exe')}[/cyan]")
         new_exe_path = os.path.join(base, "mainrev_new.exe")
         ok = download_file("https://github.com/TDoomX/exitlag-auto-signup-revamp/releases/latest/download/mainrev.exe", new_exe_path)
         if not ok:
             success = False
 
-    console.print(f"[cyan]Baixando main.py...[/cyan]")
+    console.print(f"[cyan]{tr('downloading_main')}[/cyan]")
     ok = download_file(f"{GITHUB_RAW}/main.py", os.path.join(base, "main.py"))
     if not ok:
         success = False
 
     os.makedirs(os.path.join(base, "translations"), exist_ok=True)
     for lang in TRANSLATIONS_LANGS:
-        console.print(f"[cyan]Baixando translations/{lang}.json...[/cyan]")
+        console.print(f"[cyan]{tr('downloading_translation').format(lang=lang)}[/cyan]")
         ok = download_file(
             f"{GITHUB_RAW}/translations/{lang}.json",
             os.path.join(base, "translations", f"{lang}.json")
@@ -129,14 +129,14 @@ def check_for_updates():
         success = False
 
     if not success:
-        console.print(f"\n[bold red]Alguns arquivos não puderam ser baixados. Continuando com a versão atual.[/bold red]")
+        console.print(f"\n[bold red]{tr('update_partial_fail')}[/bold red]")
         if getattr(sys, 'frozen', False) and os.path.exists(new_exe_path):
             os.remove(new_exe_path)
         return
 
-    console.print(f"\n[bold green]✓ Atualização concluída![/bold green]")
-    console.print(f"[bold yellow]Esta janela irá fechar e o programa abrirá novamente automaticamente.[/bold yellow]")
-    console.print(f"[dim]Pressione Enter para pular a contagem.[/dim]\n")
+    console.print(f"\n[bold green]{tr('update_complete')}[/bold green]")
+    console.print(f"[bold yellow]{tr('update_reopening')}[/bold yellow]")
+    console.print(f"[dim]{tr('update_skip_countdown')}[/dim]\n")
 
     skip = threading.Event()
 
@@ -150,7 +150,7 @@ def check_for_updates():
     for i in range(5, 0, -1):
         if skip.is_set():
             break
-        console.print(f"[cyan]Reabrindo em {i}s...[/cyan]", end="\r")
+        console.print(f"[cyan]{tr('update_countdown').format(i=i)}[/cyan]", end="\r")
         time.sleep(1)
 
     console.print()
