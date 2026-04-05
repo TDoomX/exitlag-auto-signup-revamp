@@ -128,6 +128,10 @@ def check_for_updates():
     if not ok:
         success = False
 
+    ok = download_file(f"{GITHUB_RAW}/lib/lib.py", os.path.join(base, "lib", "lib.py"))
+    if not ok:
+        success = False
+
     if not success:
         console.print(f"\n[bold red]{tr('update_partial_fail')}[/bold red]")
         if getattr(sys, 'frozen', False) and os.path.exists(new_exe_path):
