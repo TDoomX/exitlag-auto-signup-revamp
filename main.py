@@ -539,7 +539,7 @@ async def main():
         
         use_last = input(tr("use_last_config_prompt")).strip().lower()
         
-        if use_last == 'y':
+        if use_last in ('y', 's', 'o', 'j', 'д'):
             browserPath = last_config.get('browser_path', '')
             passw = last_config.get('password', '')
             proxyUsage = last_config.get('proxy', '')
