@@ -8,6 +8,7 @@ import json
 import urllib.request
 import subprocess
 import ctypes
+import traceback
 
 from tqdm import tqdm
 from tqdm import TqdmExperimentalWarning
@@ -35,6 +36,13 @@ TRANSLATIONS_LANGS = ["de", "en", "es", "fr", "it", "pt", "ru"]
 def get_base():
     return os.path.dirname(os.path.abspath(sys.executable if getattr(sys, 'frozen', False) else __file__))
 
+def handle_exception(exc_type, exc_value, exc_traceback):
+    base = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, 'frozen', False) else __file__))
+    with open(os.path.join(base, "error_log.txt"), "w") as f:
+        traceback.print_exception(exc_type, exc_value, exc_traceback, file=f)
+    input("Erro! Pressione Enter para sair...")
+
+sys.excepthook = handle_exception
 
 def get_local_version():
     version_path = os.path.join(get_base(), LOCAL_VERSION_FILE)
