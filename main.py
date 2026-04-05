@@ -73,7 +73,6 @@ def download_file(url, dest_path):
 def check_for_updates():
     console.print(f"[cyan]Verificando atualizações...[/cyan]")
 
-    # Limpa old exe se existir de update anterior
     old_exe = os.path.join(get_base(), "mainrev_old.exe")
     if os.path.exists(old_exe):
         try:
@@ -103,7 +102,6 @@ def check_for_updates():
     base = get_base()
     success = True
 
-    # Baixar mainrev.exe (somente se estiver rodando como .exe)
     if getattr(sys, 'frozen', False):
         console.print(f"[cyan]Baixando mainrev.exe...[/cyan]")
         new_exe_path = os.path.join(base, "mainrev_new.exe")
@@ -111,13 +109,11 @@ def check_for_updates():
         if not ok:
             success = False
 
-    # Baixar main.py
     console.print(f"[cyan]Baixando main.py...[/cyan]")
     ok = download_file(f"{GITHUB_RAW}/main.py", os.path.join(base, "main.py"))
     if not ok:
         success = False
 
-    # Baixar translations
     os.makedirs(os.path.join(base, "translations"), exist_ok=True)
     for lang in TRANSLATIONS_LANGS:
         console.print(f"[cyan]Baixando translations/{lang}.json...[/cyan]")
@@ -128,7 +124,6 @@ def check_for_updates():
         if not ok:
             success = False
 
-    # Baixar version.txt
     ok = download_file(f"{GITHUB_RAW}/version.txt", os.path.join(base, "version.txt"))
     if not ok:
         success = False
@@ -160,7 +155,6 @@ def check_for_updates():
 
     console.print()
 
-    # Reiniciar via wscript + bat (sem herdar handles do processo atual)
     if getattr(sys, 'frozen', False):
         exe_path = os.path.join(base, "mainrev.exe")
         new_exe = os.path.join(base, "mainrev_new.exe")
@@ -171,7 +165,7 @@ def check_for_updates():
             "@echo off\r\n"
             "timeout /t 2 /nobreak > nul\r\n"
             f"move /y \"{new_exe}\" \"{exe_path}\"\r\n"
-            f"start \"\" \"{exe_path}\"\r\n"
+            f"\"{exe_path}\"\r\n"
             f"del \"{vbs_path}\"\r\n"
             "del \"%~f0\"\r\n"
         )
@@ -507,7 +501,7 @@ class Plan1BrowserAutomation:
             
             try:
                 error_text = await tab.execute_script("""
-                    const error = document.querySelector('.error, .alert-danger, [data-error]");
+                    const error = document.querySelector('.error, .alert-danger, [data-error]');
                     return error ? error.textContent : null;
                 """)
                 
