@@ -7,7 +7,6 @@ import sys
 import json
 import urllib.request
 import subprocess
-import ctypes
 
 from tqdm import tqdm
 from tqdm import TqdmExperimentalWarning
@@ -70,6 +69,13 @@ def download_file(url, dest_path):
 
 def check_for_updates():
     console.print(f"[cyan]Verificando atualizações...[/cyan]")
+    old_exe = os.path.join(get_base(), "mainrev_old.exe")
+    
+    if os.path.exists(old_exe):
+        try:
+            os.remove(old_exe)
+        except Exception:
+            pass
 
     remote_version = get_remote_version()
     if remote_version is None:
@@ -96,8 +102,8 @@ def check_for_updates():
     # Baixar main.exe (somente se estiver rodando como .exe)
     if getattr(sys, 'frozen', False):
         console.print(f"[cyan]Baixando mainrev.exe...[/cyan]")
-        new_exe_path = os.path.join(base, "mainrev_new.exe")
-        ok = download_file("https://github.com/TDoomX/exitlag-auto-signup-revamp/releases/latest/download/mainrev.exe", new_exe_path)
+        exe_path = os.path.join(base, "mainrev.exe")
+        ok = download_file("https://github.com/TDoomX/exitlag-auto-signup-revamp/releases/latest/download/mainrev.exe", exe_path)
         if not ok:
             success = False
 
@@ -127,44 +133,12 @@ def check_for_updates():
         console.print(f"\n[bold red]Alguns arquivos não puderam ser baixados. Continuando com a versão atual.[/bold red]")
         return
 
-    console.print(f"\n[bold green]✓ Atualização concluída![/bold green]")
-    console.print(f"[bold yellow]Esta janela irá fechar e o programa abrirá novamente automaticamente.[/bold yellow]")
-    console.print(f"[dim]Pressione Enter para pular a contagem.[/dim]\n")
-
-    import threading
-    skip = threading.Event()
-
-    def wait_for_enter():
-        input()
-        skip.set()
-
-    t = threading.Thread(target=wait_for_enter, daemon=True)
-    t.start()
-
-    for i in range(5, 0, -1):
-        if skip.is_set():
-            break
-        console.print(f"[cyan]Reabrindo em {i}s...[/cyan]", end="\r")
-        time.sleep(1)
-
-    console.print()
+    console.print(f"\n[bold green]✓ Atualização concluída! Reiniciando...[/bold green]")
+    time.sleep(2)
 
     # Reiniciar
     if getattr(sys, 'frozen', False):
-        exe_path = os.path.join(base, "mainrev.exe")
-        old_exe = os.path.join(base, "mainrev_old.exe")
-        new_exe = os.path.join(base, "mainrev_new.exe")
-        try:
-            if os.path.exists(new_exe):
-                if os.path.exists(old_exe):
-                    os.remove(old_exe)
-                os.rename(exe_path, old_exe)
-                os.rename(new_exe, exe_path)
-            ctypes.windll.shell32.ShellExecuteW(None, "open", exe_path, None, None, 1)
-        except Exception as e:
-            console.print(f"[red]Erro ao reabrir: {e}[/red]")
-            if os.path.exists(old_exe) and not os.path.exists(exe_path):
-                os.rename(old_exe, exe_path)
+        subprocess.Popen([sys.executable])
     else:
         subprocess.Popen([sys.executable, os.path.join(base, "main.py")])
 
@@ -572,7 +546,7 @@ async def main():
         
         use_last = input(tr("use_last_config_prompt")).strip().lower()
         
-        if use_last == 'y':
+        if use_last in ('y', 's', 'o', 'j', 'д'):
             browserPath = last_config.get('browser_path', '')
             passw = last_config.get('password', '')
             proxyUsage = last_config.get('proxy', '')
