@@ -1,7 +1,5 @@
 import requests
-import sys
 import re
-from DrissionPage import ChromiumPage
 
 
 # Author: Doom
@@ -32,27 +30,6 @@ class Main:
                 return "\nPassword does not meet the requirements. Please use at least 1 special character (!@#$%^&*(),.?\":{}|<>)."
             if not hasNumber:
                 return "\nPassword does not meet the requirements. Please use at least 1 number."
-
-    def checkUpdate(self):
-        try:
-            resp = requests.get(
-                "https://api.github.com/repos/TDoomX/exitlag-auto-signup-revamp/releases/latest",
-                timeout=5
-            )
-            resp.raise_for_status()
-            latestVer = resp.json()["tag_name"]
-
-            with open("version.txt", "r") as file:
-                currentVer = file.read().strip()
-
-            if currentVer < latestVer:
-                print(f"Update available: {latestVer} (Current: {currentVer})")
-                print(f"Download: https://github.com/TDoomX/exitlag-auto-signup-revamp/releases/latest")
-            else:
-                print(f"You are running the latest version: {currentVer}")
-
-        except Exception as e:
-            print(f"Could not check for updates: {e}")
 
     def testProxy(self, proxy):
         try:
