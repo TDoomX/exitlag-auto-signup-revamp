@@ -7,6 +7,7 @@ import sys
 import json
 import urllib.request
 import subprocess
+import threading
 import ctypes
 
 from tqdm import tqdm
@@ -72,6 +73,7 @@ def download_file(url, dest_path):
 def check_for_updates():
     console.print(f"[cyan]Verificando atualizações...[/cyan]")
 
+    # Limpa old exe se existir de update anterior
     old_exe = os.path.join(get_base(), "mainrev_old.exe")
     if os.path.exists(old_exe):
         try:
@@ -101,7 +103,7 @@ def check_for_updates():
     base = get_base()
     success = True
 
-    # Baixar main.exe (somente se estiver rodando como .exe)
+    # Baixar mainrev.exe (somente se estiver rodando como .exe)
     if getattr(sys, 'frozen', False):
         console.print(f"[cyan]Baixando mainrev.exe...[/cyan]")
         new_exe_path = os.path.join(base, "mainrev_new.exe")
@@ -133,13 +135,14 @@ def check_for_updates():
 
     if not success:
         console.print(f"\n[bold red]Alguns arquivos não puderam ser baixados. Continuando com a versão atual.[/bold red]")
+        if getattr(sys, 'frozen', False) and os.path.exists(new_exe_path):
+            os.remove(new_exe_path)
         return
 
     console.print(f"\n[bold green]✓ Atualização concluída![/bold green]")
     console.print(f"[bold yellow]Esta janela irá fechar e o programa abrirá novamente automaticamente.[/bold yellow]")
     console.print(f"[dim]Pressione Enter para pular a contagem.[/dim]\n")
 
-    import threading
     skip = threading.Event()
 
     def wait_for_enter():
@@ -157,42 +160,29 @@ def check_for_updates():
 
     console.print()
 
-    # Reiniciar
+    # Reiniciar via wscript + bat (sem herdar handles do processo atual)
     if getattr(sys, 'frozen', False):
         exe_path = os.path.join(base, "mainrev.exe")
-        old_exe = os.path.join(base, "mainrev_old.exe")
         new_exe = os.path.join(base, "mainrev_new.exe")
-        try:
-            if os.path.exists(new_exe):
-                if os.path.exists(old_exe):
-                    os.remove(old_exe)
-            os.rename(exe_path, old_exe)
-            os.rename(new_exe, exe_path)
+        bat_path = os.path.join(base, "update.bat")
+        vbs_path = os.path.join(base, "update.vbs")
 
-            # TROCA: os.startfile → subprocess.Popen com DETACHED
-            subprocess.Popen(
-                [exe_path],
-                creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_CONSOLE,
-                close_fds=True
-            )
+        bat_content = (
+            "@echo off\r\n"
+            "timeout /t 2 /nobreak > nul\r\n"
+            f"move /y \"{new_exe}\" \"{exe_path}\"\r\n"
+            f"start \"\" \"{exe_path}\"\r\n"
+            f"del \"{vbs_path}\"\r\n"
+            "del \"%~f0\"\r\n"
+        )
+        with open(bat_path, "w", encoding="utf-8") as f:
+            f.write(bat_content)
 
-            if os.path.exists(old_exe):
-                bat_path = os.path.join(base, "cleanup.bat")
-                with open(bat_path, "w") as f:
-                    f.write(
-                        f'@echo off\r\n'
-                        f'timeout /t 5 /nobreak > nul\r\n'
-                        f'del /f /q "{old_exe}"\r\n'
-                        f'del /f /q "%~f0"\r\n'
-                    )
-                subprocess.Popen(
-                    ["cmd", "/c", bat_path],
-                    creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_CONSOLE
-                )
-        except Exception as e:
-            console.print(f"[red]Erro ao reabrir: {e}[/red]")
-            if os.path.exists(old_exe) and not os.path.exists(exe_path):
-                os.rename(old_exe, exe_path)
+        vbs_content = f'CreateObject("WScript.Shell").Run "{bat_path}", 0, False\r\n'
+        with open(vbs_path, "w", encoding="utf-8") as f:
+            f.write(vbs_content)
+
+        subprocess.Popen(["wscript.exe", vbs_path], close_fds=True)
     else:
         subprocess.Popen([sys.executable, os.path.join(base, "main.py")])
 
@@ -517,7 +507,7 @@ class Plan1BrowserAutomation:
             
             try:
                 error_text = await tab.execute_script("""
-                    const error = document.querySelector('.error, .alert-danger, [data-error]');
+                    const error = document.querySelector('.error, .alert-danger, [data-error]");
                     return error ? error.textContent : null;
                 """)
                 
@@ -683,5 +673,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
     asyncio.run(main())
