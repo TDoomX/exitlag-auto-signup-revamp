@@ -10,12 +10,19 @@ import subprocess
 import ctypes
 import traceback
 
+def handle_exception(exc_type, exc_value, exc_traceback):
+    base = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, 'frozen', False) else __file__))
+    with open(os.path.join(base, "error_log.txt"), "w") as f:
+        traceback.print_exception(exc_type, exc_value, exc_traceback, file=f)
+    input("Erro! Pressione Enter para sair...")
+
+sys.excepthook = handle_exception
+
 from tqdm import tqdm
 from tqdm import TqdmExperimentalWarning
 from pydoll.browser import Chrome
 from pydoll.browser.options import ChromiumOptions
 from pydoll.constants import Key
-from DrissionPage import Chromium, ChromiumOptions as DrissionOptions
 from lib.lib import Main
 from rich.console import Console
 from faker import Faker
@@ -36,13 +43,6 @@ TRANSLATIONS_LANGS = ["de", "en", "es", "fr", "it", "pt", "ru"]
 def get_base():
     return os.path.dirname(os.path.abspath(sys.executable if getattr(sys, 'frozen', False) else __file__))
 
-def handle_exception(exc_type, exc_value, exc_traceback):
-    base = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, 'frozen', False) else __file__))
-    with open(os.path.join(base, "error_log.txt"), "w") as f:
-        traceback.print_exception(exc_type, exc_value, exc_traceback, file=f)
-    input("Erro! Pressione Enter para sair...")
-
-sys.excepthook = handle_exception
 
 def get_local_version():
     version_path = os.path.join(get_base(), LOCAL_VERSION_FILE)
@@ -568,8 +568,6 @@ async def main():
     check_for_updates()
 
     lib = Main()
-    co = DrissionOptions()
-    co.incognito().auto_port().mute(True)
 
     last_config = load_config()
     
@@ -594,12 +592,9 @@ async def main():
             executionCount = last_config.get('execution_count', 1)
             escolha_plano = last_config.get('plan', '1')
             
-            if browserPath and os.path.exists(browserPath):
-                co.set_browser_path(browserPath)
-            
             if proxyUsage:
                 if lib.testProxy(proxyUsage)[0]:
-                    co.set_proxy(proxyUsage)
+                    pass
         else:
             last_config = None
     
@@ -614,7 +609,6 @@ async def main():
             ).replace('"', '').replace("'", '')
             if browserPath != "":
                 if os.path.exists(browserPath):
-                    co.set_browser_path(browserPath)
                     break
                 else:
                     console.print(f"[bold red]{tr('invalid_path')}[/bold red]")
@@ -651,9 +645,7 @@ async def main():
                     console.print(f"[bold red]{tr('invalid_number')}[/bold red]")
 
         if proxyUsage != "":
-            if lib.testProxy(proxyUsage)[0]:
-                co.set_proxy(proxyUsage)
-            else:
+            if not lib.testProxy(proxyUsage)[0]:
                 console.print(lib.testProxy(proxyUsage)[1])
 
         fake = Faker()
