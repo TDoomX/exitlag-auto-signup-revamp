@@ -159,24 +159,19 @@ def check_for_updates():
         exe_path = os.path.join(base, "mainrev.exe")
         new_exe = os.path.join(base, "mainrev_new.exe")
         bat_path = os.path.join(base, "update.bat")
-        vbs_path = os.path.join(base, "update.vbs")
 
         bat_content = (
             "@echo off\r\n"
             "timeout /t 2 /nobreak > nul\r\n"
             f"move /y \"{new_exe}\" \"{exe_path}\"\r\n"
-            f"\"{exe_path}\"\r\n"
-            f"del \"{vbs_path}\"\r\n"
+            f"explorer.exe \"{exe_path}\"\r\n"
             "del \"%~f0\"\r\n"
         )
         with open(bat_path, "w", encoding="utf-8") as f:
             f.write(bat_content)
 
-        vbs_content = f'CreateObject("WScript.Shell").Run "{bat_path}", 0, False\r\n'
-        with open(vbs_path, "w", encoding="utf-8") as f:
-            f.write(vbs_content)
-
-        subprocess.Popen(["wscript.exe", vbs_path], close_fds=True)
+        subprocess.Popen(bat_path, shell=True)
+        time.sleep(0.5)
     else:
         subprocess.Popen([sys.executable, os.path.join(base, "main.py")])
 
