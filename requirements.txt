@@ -1,6 +1,5 @@
 tqdm==4.66.3
-rich==13.8.0
 faker==25.2.0
 pydoll-python
-charset-normalizer
-requests==2.32.5
+PyQt6
+psutil
