@@ -1284,6 +1284,7 @@ class AccountsDialog(QDialog):
 
 class UpdateDialog(QDialog):
     status_signal = pyqtSignal(str, str)
+    exit_signal   = pyqtSignal(str)  # payload: 'exe' | 'py' | 'py:<path>'
 
     def __init__(self, local, remote, parent=None):
         super().__init__(parent)
@@ -1328,6 +1329,15 @@ class UpdateDialog(QDialog):
         layout.addWidget(btn)
 
         self.status_signal.connect(self._on_status)
+        self.exit_signal.connect(self._on_exit)
+
+    def _on_exit(self, mode):
+        QApplication.instance().closeAllWindows()
+        if mode == 'exe':
+            pass  # bat already launched, just quit
+        elif mode.startswith('py:'):
+            subprocess.Popen([sys.executable, mode[3:]])
+        QApplication.instance().quit()
 
     def _on_status(self, text, color):
         self._status.setText(text)
@@ -1382,7 +1392,7 @@ class UpdateDialog(QDialog):
                     f.write(bat_content)
                 time.sleep(0.5)
                 subprocess.Popen(bat_path, shell=True)
-                sys.exit(0)
+                self.exit_signal.emit('exe')
             else:
                 req_path = os.path.join(base, "requirements.txt")
                 if os.path.exists(req_path):
@@ -1391,8 +1401,7 @@ class UpdateDialog(QDialog):
                         [sys.executable, "-m", "pip", "install", "-r", req_path],
                         capture_output=True
                     )
-                subprocess.Popen([sys.executable, os.path.join(base, "main.py")])
-                sys.exit(0)
+                self.exit_signal.emit(f'py:{os.path.join(base, "main.py")}')
 
         threading.Thread(target=run, daemon=True).start()
 
