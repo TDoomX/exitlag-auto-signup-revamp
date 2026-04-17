@@ -2003,6 +2003,8 @@ class App(QMainWindow):
 # ─── Entry point ──────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
+    import multiprocessing
+    multiprocessing.freeze_support()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
     window = App()
