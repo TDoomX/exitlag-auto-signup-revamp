@@ -21,7 +21,7 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QPushButton, QLineEdit, QTextEdit, QRadioButton,
     QButtonGroup, QFrame, QFileDialog, QScrollArea, QMenu, QDialog,
-    QProgressBar, QSizePolicy, QMessageBox, QWidgetAction
+    QProgressBar, QSizePolicy, QMessageBox
 )
 from PyQt6.QtCore import (
     Qt, QTimer, QThread, pyqtSignal, QObject, QSize, QPoint
@@ -129,7 +129,7 @@ atexit.register(cleanup_orphaned_browsers)
 CONFIG_FILE          = "last_config.json"
 GITHUB_RAW           = "https://raw.githubusercontent.com/TDoomX/exitlag-auto-signup-revamp/master"
 LOCAL_VERSION_FILE   = "version.txt"
-TRANSLATIONS_LANGS   = ["de", "en", "es", "fr", "it", "ja", "pt", "ru", "zh"]
+TRANSLATIONS_LANGS = ["de", "en", "es", "fr", "it", "ja", "pt", "ru", "zh", "vi", "ar"]
 
 BG       = "#0d0f14"
 BG2      = "#13161e"
@@ -461,15 +461,13 @@ def load_translations():
     LANG_MAP = {
         'pt': 'pt', 'en': 'en', 'es': 'es', 'fr': 'fr',
         'de': 'de', 'it': 'it', 'ru': 'ru', 'ja': 'ja', 'zh': 'zh',
+        'vi': 'vi', 'ar': 'ar',
+
         'portuguese': 'pt', 'english': 'en', 'spanish': 'es',
-        'french': 'fr', 'german': 'de', 'italian': 'it', 'russian': 'ru',
-        'japanese': 'ja', 'chinese': 'zh',
-        'portuguese_brazil': 'pt', 'portuguese_portugal': 'pt',
-        'spanish_spain': 'es', 'french_france': 'fr',
-        'german_germany': 'de', 'italian_italy': 'it',
-        'russian_russia': 'ru', 'japanese_japan': 'ja',
-        'chinese_china': 'zh', 'chinese_taiwan': 'zh',
-    }
+        'french': 'fr', 'german': 'de', 'italian': 'it',
+        'russian': 'ru', 'japanese': 'ja', 'chinese': 'zh',
+        'vietnamese': 'vi', 'arabic': 'ar',
+}
     try:
         locale.setlocale(locale.LC_ALL, '')
         lang_tuple = locale.getlocale()
@@ -538,10 +536,179 @@ def gerar_email_plan2():
     """Email para plano de 7 dias (omen)"""
     return ''.join(random.choice("abcdefghijklmnopqrstuvwxyz") for _ in range(8)) + "@zylker.com"
 
+# ─── Hacker Banner Widget ────────────────────────────────────────────────────
+
+class HackerBannerWidget(QWidget):
+    """
+    ASCII-art banner estilo warez/demoscene anos 2000.
+    Efeitos: glitch de cor, cursor piscante, scanlines, ruído de chars.
+    """
+
+    _ASCII = [
+        "______ _____  ________  _____   _______ _       ___  _____ ",
+        "|  _  \\  _  ||  _  |  \\/  |\\ \\ / /_   _| |     / _ \\|  __ \\",
+        "| | | | | | || | | | .  . | \\ V /  | | | |    / /_\\ \\ |  \\/",
+        "| | | | | | || | | | |\\/| | /   \\  | | | |    |  _  | | __ ",
+        "| |/ /\\ \\_/ /\\ \\_/ / |  | |/ /^\\ \\ | | | |____| | | | |_\\ \\",
+        "|___/  \\___/  \\___/\\_|  |_/\\/   \\/ \\_/ \\_____/\\_| |_/\\____/",
+    ]
+
+    _NOISE_CHARS = list(r"@#$%&!?\/|<>[]{}01")
+
+    def __init__(self, subtitle="", parent=None):
+        super().__init__(parent)
+        self._subtitle  = subtitle
+        self._tick      = 0
+        self._cursor_on = True
+        self._noise     = {}          # {(row, col): (char, ttl)}
+        self._glitch_x  = 0
+        self._glitch_on = False
+
+        self.setFixedHeight(112)
+        self.setAttribute(Qt.WidgetAttribute.WA_OpaquePaintEvent, False)
+
+        self._timer = QTimer(self)
+        self._timer.timeout.connect(self._on_tick)
+        self._timer.start(80)          # ~12 fps — suficiente pro efeito
+
+    def _on_tick(self):
+        self._tick += 1
+
+        # cursor blink a cada 6 ticks (~500 ms)
+        if self._tick % 6 == 0:
+            self._cursor_on = not self._cursor_on
+
+        # glitch rápido a cada ~2 s
+        if self._tick % 25 == 0:
+            self._glitch_on = True
+            self._glitch_x  = random.randint(-4, 4)
+        elif self._tick % 25 == 3:
+            self._glitch_on = False
+            self._glitch_x  = 0
+
+        # injeta ruído aleatório
+        if self._tick % 4 == 0 and random.random() < 0.6:
+            r = random.randrange(len(self._ASCII))
+            c = random.randrange(len(self._ASCII[r]))
+            self._noise[(r, c)] = (random.choice(self._NOISE_CHARS), 3)
+
+        # decrementa TTL do ruído
+        dead = [k for k, (ch, ttl) in self._noise.items() if ttl <= 1]
+        for k in dead:
+            del self._noise[k]
+        for k in list(self._noise):
+            if k in self._noise:
+                ch, ttl = self._noise[k]
+                self._noise[k] = (ch, ttl - 1)
+
+        self.update()
+
+    def paintEvent(self, event):
+        p = QPainter(self)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing, False)
+
+        W, H = self.width(), self.height()
+
+        # fundo transparente (herda o BG do app)
+        p.fillRect(0, 0, W, H, QColor(0, 0, 0, 0))
+
+        # scanlines sutis
+        scan_col = QColor(0, 0, 0, 18)
+        for y in range(0, H, 2):
+            p.fillRect(0, y, W, 1, scan_col)
+
+        # fonte monospace para o ASCII
+        font = QFont("Consolas", 7)
+        font.setStyleHint(QFont.StyleHint.Monospace)
+        font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 0.5)
+        p.setFont(font)
+
+        fm       = p.fontMetrics()
+        ch_w     = fm.horizontalAdvance("X")
+        ch_h     = fm.height()
+        rows     = len(self._ASCII)
+        max_cols = max(len(l) for l in self._ASCII)
+        total_w  = max_cols * ch_w
+        x0       = max(10, (W - total_w) // 2)
+        y0       = 12
+
+        # cores base cycling — verde/ciano como terminal antigo
+        t        = self._tick
+        r_base   = int(0 + 10 * math.sin(t * 0.05))
+        g_base   = int(180 + 30 * math.sin(t * 0.03))
+        b_base   = int(220 + 35 * math.sin(t * 0.07))
+        base_col = QColor(max(0,r_base), min(255,g_base), min(255,b_base))
+
+        glitch_col  = QColor(255, 50,  80)   # vermelho no glitch
+        noise_col   = QColor(80,  255, 120)  # verde brilhante p/ ruído
+        dim_col     = QColor(0,   100, 130)  # chars apagados
+
+        for row_i, line in enumerate(self._ASCII):
+            gx = self._glitch_x if (self._glitch_on and row_i % 3 == 1) else 0
+            for col_i, orig_ch in enumerate(line):
+                cx = x0 + col_i * ch_w + gx
+                cy = y0 + row_i * ch_h
+
+                if (row_i, col_i) in self._noise:
+                    ch  = self._noise[(row_i, col_i)][0]
+                    col = noise_col
+                elif orig_ch == ' ':
+                    continue
+                elif self._glitch_on and row_i == 2 and col_i % 7 == 0:
+                    ch  = orig_ch
+                    col = glitch_col
+                else:
+                    # gradiente horizontal suave
+                    t2  = col_i / max(max_cols - 1, 1)
+                    rv  = int(r_base * (1 - t2))
+                    gv  = int(g_base * (0.6 + 0.4 * t2))
+                    bv  = int(b_base * (0.7 + 0.3 * (1 - t2)))
+                    col = QColor(max(0,min(255,rv)), max(0,min(255,gv)), max(0,min(255,bv)))
+                    ch  = orig_ch
+
+                p.setPen(col)
+                p.drawText(cx, cy + ch_h - fm.descent(), ch)
+
+        # linha decorativa abaixo do ASCII
+        deco_y = y0 + rows * ch_h + 3
+        grad = QLinearGradient(x0, deco_y, x0 + total_w, deco_y)
+        grad.setColorAt(0.0, QColor(0, 0, 0, 0))
+        grad.setColorAt(0.3, base_col)
+        grad.setColorAt(0.7, base_col)
+        grad.setColorAt(1.0, QColor(0, 0, 0, 0))
+        p.setPen(QPen(QBrush(grad), 1))
+        p.drawLine(x0, deco_y, x0 + total_w, deco_y)
+
+        # subtitle + cursor piscante
+        if self._subtitle:
+            sfont = QFont("Consolas", 8)
+            sfont.setStyleHint(QFont.StyleHint.Monospace)
+            p.setFont(sfont)
+            sfm     = p.fontMetrics()
+            cursor  = "_" if self._cursor_on else " "
+            txt     = f">> {self._subtitle}{cursor}"
+            tw      = sfm.horizontalAdvance(txt)
+            sx      = max(10, (W - tw) // 2)
+            sy      = deco_y + 14
+            # sombra glow
+            glow    = QColor(0, 200, 255, 40)
+            p.setPen(glow)
+            for dx in (-1, 0, 1):
+                p.drawText(sx + dx, sy + 1, txt)
+            p.setPen(QColor(0, 200, 220))
+            p.drawText(sx, sy, txt)
+
+        p.end()
+
+    def closeEvent(self, event):
+        self._timer.stop()
+        super().closeEvent(event)
+
+
 # ─── Loader ───────────────────────────────────────────────────────────────────
 
 def open_loader():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = get_base()
     loader_path = os.path.join(base_dir, "Exitloader.exe")
     dll_path    = os.path.join(base_dir, "ExitLag.dll")
     missing = []
@@ -551,27 +718,75 @@ def open_loader():
         missing.append("ExitLag.dll")
     if missing:
         QMessageBox.critical(
-            None, "Loader — Arquivo não encontrado",
-            "Arquivo(s) ausente(s) na pasta do script:\n\n" + "\n".join(f"  • {m}" for m in missing)
+            None, tr("loader_missing_title"),
+            tr("loader_missing_body") + "\n".join(f"  • {m}" for m in missing)
         )
         return
     ctypes.windll.shell32.ShellExecuteW(None, "runas", loader_path, None, base_dir, 1)
 
 # ─── Browser Automation ───────────────────────────────────────────────────────
 
-class HumanizedBrowserAutomation:
-    """Plano de 7 dias - /lp/omen"""
-    def __init__(self):
-        from faker import Faker
-        self.fake = Faker()
+
+# ─── Plan configs ─────────────────────────────────────────────────────────────
+
+PLAN_CONFIGS = {
+    "1": {
+        "url":       "https://www.exitlag.com/lp/trial",
+        "email_fn":  "gerar_email_aleatorio",
+        "selectors": {
+            "first":    "#inputFirstName",
+            "last":     "#inputLastName",
+            "email":    "#inputEmail",
+            "password": "#inputNewPassword",
+            "confirm":  "#inputNewPassword2",
+            "tos":      "#hero-terms-check",
+        },
+        "pre_click": "#heroSocialFlow > button",
+        "pre_delay": 1.0,
+    },
+    "2": {
+        "url":       "https://www.exitlag.com/lp/omen",
+        "email_fn":  "gerar_email_plan2",
+        "selectors": {
+            "first":    "#firstName",
+            "last":     "#lastName",
+            "email":    "#email",
+            "password": "#password",
+            "confirm":  "#confirmPassword",
+            "tos":      "#acceptTos",
+        },
+        "pre_click": None,
+        "pre_delay": 0.0,
+    },
+}
+
+_EMAIL_FNS = {
+    "gerar_email_aleatorio": lambda: gerar_email_aleatorio(),
+    "gerar_email_plan2":     lambda: gerar_email_plan2(),
+}
+
+# ─── Browser Automation ───────────────────────────────────────────────────────
+
+class BrowserAutomation:
+    """Classe unificada para todos os planos — comportamento injetado via PLAN_CONFIGS."""
+
+    def __init__(self, plan_config: dict):
+        self.cfg   = plan_config
+        self.fake  = Faker()
         self.ghost = None
+
+    # ── helpers ───────────────────────────────────────────────────────────────
 
     async def fill_field_instantly(self, tab, selector, text):
         await tab.execute_script(f"document.querySelector('{selector}').focus();")
         await asyncio.sleep(0.1)
         escaped_text = text.replace("\\", "\\\\").replace('"', '\\"')
-        await tab.execute_script(f"document.querySelector('{selector}').value = \"{escaped_text}\";")
-        await tab.execute_script(f"document.querySelector('{selector}').dispatchEvent(new Event('input', {{ bubbles: true }}));")
+        await tab.execute_script(
+            f"document.querySelector('{selector}').value = \"{escaped_text}\";"
+        )
+        await tab.execute_script(
+            f"document.querySelector('{selector}').dispatchEvent(new Event('input', {{ bubbles: true }}));"
+        )
         await asyncio.sleep(0.05)
 
     async def _interruptible_sleep(self, seconds, cancel_event):
@@ -588,16 +803,24 @@ class HumanizedBrowserAutomation:
             await tab.execute_script('document.title = "DOOM_GHOSTAPI";')
             self.ghost = GhostModeAPI()
             self.ghost._hide_by_title("DOOM_GHOSTAPI")
-            asyncio.create_task(self.ghost.auto_cloak_loop("DOOM_GHOSTAPI", duration=120, cancel_event=cancel_event))
+            asyncio.create_task(
+                self.ghost.auto_cloak_loop("DOOM_GHOSTAPI", duration=120, cancel_event=cancel_event)
+            )
             if not _PSUTIL_OK:
-                log_cb("⚠ psutil not installed — run: pip install psutil", "warning")
+                log_cb(tr("psutil_missing"), "warning")
         except Exception as e:
-            log_cb(f"⚠ Erro ao esconder janela: {str(e)[:50]}", "warning")
+            log_cb(tr("ghost_hide_error").format(e=str(e)[:50]), "warning")
 
-    async def register_account(self, password, browser_path, log_cb, step_cb, headless=False, cancel_event=None):
-        email = gerar_email_plan2()
+    # ── main entry point ──────────────────────────────────────────────────────
+
+    async def register_account(self, password, browser_path, log_cb, step_cb,
+                                headless=False, cancel_event=None):
+        cfg        = self.cfg
+        sel        = cfg["selectors"]
+        email      = _EMAIL_FNS[cfg["email_fn"]]()
         first_name = self.fake.first_name()
-        last_name = self.fake.last_name()
+        last_name  = self.fake.last_name()
+
         options = ChromiumOptions()
         options.browser_preferences = {
             "profile.default_content_setting_values.notifications": 2,
@@ -609,54 +832,75 @@ class HumanizedBrowserAutomation:
             options.add_argument("--disable-blink-features=AutomationControlled")
         if browser_path:
             options.binary_location = browser_path
+
         browser = Chrome(options=options)
-        tab = await browser.start()
+        tab     = await browser.start()
         if headless:
             await self._setup_ghost_mode(tab, log_cb, cancel_event)
+
+        def _early_exit():
+            log_cb(f"⚠ {tr('btn_cancel')}", "warning")
+
+        async def _safe_stop():
+            try:
+                await browser.stop()
+            except Exception:
+                pass
+
         try:
             log_cb(f"📧 Email: {email}", "info")
             step_cb(tr('opening_browser'))
-            await tab.go_to("https://www.exitlag.com/lp/omen")
+            await tab.go_to(cfg["url"])
+
             if await self._interruptible_sleep(2, cancel_event):
-                log_cb(f"⚠ {tr('btn_cancel')}", "warning")
-                try: await browser.stop()
-                except: pass
+                _early_exit(); await _safe_stop()
                 return {"email": email, "password": password, "success": False}
+
             step_cb(tr('filling_form'))
             log_cb(tr('filling_form'), "info")
-            await self.fill_field_instantly(tab, '#firstName', first_name)
-            await self.fill_field_instantly(tab, '#lastName', last_name)
-            await self.fill_field_instantly(tab, '#email', email)
-            await self.fill_field_instantly(tab, '#password', password)
-            await self.fill_field_instantly(tab, '#confirmPassword', password)
+
+            # pre_click: botão extra que o trial exige antes de exibir o form
+            if cfg["pre_click"]:
+                await tab.execute_script(
+                    f"document.querySelector('{cfg['pre_click']}').click();"
+                )
+                await asyncio.sleep(cfg["pre_delay"])
+
+            await self.fill_field_instantly(tab, sel["first"],    first_name)
+            await self.fill_field_instantly(tab, sel["last"],     last_name)
+            await self.fill_field_instantly(tab, sel["email"],    email)
+            await self.fill_field_instantly(tab, sel["password"], password)
+            await self.fill_field_instantly(tab, sel["confirm"],  password)
             await asyncio.sleep(0.2)
-            await tab.execute_script("document.querySelector('#acceptTos').click();")
+            await tab.execute_script(f"document.querySelector('{sel['tos']}').click();")
+
             step_cb(tr('waiting_captcha'))
             log_cb(tr('waiting_captcha'), "warning")
             if await self._interruptible_sleep(5, cancel_event):
-                log_cb(f"⚠ {tr('btn_cancel')}", "warning")
-                try: await browser.stop()
-                except: pass
+                _early_exit(); await _safe_stop()
                 return {"email": email, "password": password, "success": False}
+
             step_cb(tr('submitting_form'))
             log_cb(tr('submitting_form'), "info")
             await tab.execute_script("document.querySelector('#registerButton').click();")
+
             if await self._interruptible_sleep(5, cancel_event):
-                log_cb(f"⚠ {tr('btn_cancel')}", "warning")
-                try: await browser.stop()
-                except: pass
+                _early_exit(); await _safe_stop()
                 return {"email": email, "password": password, "success": False}
+
             try:
                 def _extract(result):
                     if isinstance(result, dict):
-                        try: return result["result"]["result"]["value"]
+                        try:    return result["result"]["result"]["value"]
                         except (KeyError, TypeError): return None
                     return result
+
                 current_url   = _extract(await tab.execute_script("return window.location.href;"))
                 page_title    = _extract(await tab.execute_script("return document.title;"))
-                page_body_txt = _extract(await tab.execute_script("return document.body ? document.body.innerText : '';"))
-                
-                # Procura apenas ERROS VISÍVEIS (não removidos do DOM)
+                page_body_txt = _extract(await tab.execute_script(
+                    "return document.body ? document.body.innerText : '';"
+                ))
+
                 error_text = _extract(await tab.execute_script("""
                     const errorSelectors = ['.error', '.alert-danger', '[data-error]',
                         '[class*="invalid-feedback"]', '.form-error', '[class*="error-msg"]',
@@ -669,6 +913,7 @@ class HumanizedBrowserAutomation:
                     }
                     return null;
                 """))
+
                 success_el = _extract(await tab.execute_script("""
                     const s = document.querySelector(
                         '.success, .alert-success, [class*="success"], [class*="thank"],' +
@@ -677,34 +922,30 @@ class HumanizedBrowserAutomation:
                     );
                     return s ? s.textContent.trim() : null;
                 """))
-                
+
                 error_text    = str(error_text).strip()    if error_text    not in (None, "None", "") else None
                 success_el    = str(success_el).strip()    if success_el    not in (None, "None", "") else None
                 current_url   = str(current_url)           if current_url   else ""
                 page_title    = str(page_title).lower()    if page_title    else ""
                 page_body_txt = str(page_body_txt).lower() if page_body_txt else ""
 
-                log_cb(f"   🔍 URL: {current_url}", "dim")
-                log_cb(f"   🔍 Título: {page_title}", "dim")
-
                 SUCCESS_KEYWORDS = ("success", "thank", "confirm", "complete",
                                     "registered", "account-created", "welcome",
                                     "obrigado", "cadastro")
-                url_lower = current_url.lower()
-                success_by_url   = any(k in url_lower   for k in SUCCESS_KEYWORDS)
-                success_by_title = any(k in page_title  for k in SUCCESS_KEYWORDS)
-                success_by_body  = any(k in page_body_txt for k in
-                                       ("thank you", "successfully created",
-                                        "account created", "registration complete",
-                                        "bem-vindo", "cadastro realizado"))
-                
+                url_lower        = current_url.lower()
+                success_by_url   = any(k in url_lower     for k in SUCCESS_KEYWORDS)
+                success_by_title = any(k in page_title    for k in SUCCESS_KEYWORDS)
+                success_by_body  = any(k in page_body_txt for k in (
+                    "thank you", "successfully created", "account created",
+                    "registration complete", "bem-vindo", "cadastro realizado"
+                ))
+
                 success = False
-                # PRIORIDADE: sucesso tem prioridade sobre erros antigos no DOM
                 if success_el or success_by_url or success_by_title or success_by_body:
                     success = True
                     step_cb(tr('step_done'))
                     log_cb(f"✓ {tr('registration_success')}", "success")
-                    log_cb(f"   📧 {email}", "success")
+                    log_cb(f"   📧 {email}",    "success")
                     log_cb(f"   🔑 {password}", "success")
                 elif error_text and "captcha" in error_text.lower():
                     log_cb(f"✗ {tr('captcha_failed')}", "error")
@@ -713,224 +954,41 @@ class HumanizedBrowserAutomation:
                     log_cb(f"✗ {tr('error_fill_form').format(e=error_text)}", "error")
                     step_cb(tr('step_failed'))
                 else:
-                    log_cb("✗ Não detectou indicador de sucesso — verifique URL/título acima", "error")
                     step_cb(tr('step_failed'))
+
                 try:
                     await browser.stop()
                     await asyncio.sleep(0.5)
                     if headless and self.ghost:
                         if self.ghost._check_if_window_exists("DOOM_GHOSTAPI"):
-                            log_cb("⚠ Navegador ainda aberto em invisível, forçando fechamento...", "warning")
+                            log_cb(tr("browser_still_open"), "warning")
                             self.ghost._force_close_by_title("DOOM_GHOSTAPI")
                             await asyncio.sleep(0.5)
                         else:
-                            log_cb("✓ Navegador fechou corretamente", "info")
-                except: pass
+                            log_cb(tr("browser_closed_ok"), "info")
+                except Exception:
+                    pass
+
                 return {"email": email, "password": password, "success": success}
+
             except Exception as e:
                 log_cb(f"✗ {tr('error_fill_form').format(e=str(e)[:80])}", "error")
                 step_cb(tr('step_failed'))
-                try: await browser.stop()
-                except: pass
+                await _safe_stop()
                 return {"email": email, "password": password, "success": False}
+
         except Exception as e:
             log_cb(f"✗ {tr('error_fill_form').format(e=str(e)[:80])}", "error")
-            try: await browser.stop()
-            except: pass
+            await _safe_stop()
             return {"email": email, "password": password, "success": False}
 
 
-class Plan1BrowserAutomation:
-    """Plano de 3 dias - /lp/trial"""
-    def __init__(self):
-        from faker import Faker
-        self.fake = Faker()
-        self.ghost = None
+async def run_accounts(plan, passw, count, browser_path, log_cb, step_cb, done_cb,
+                       cancel_event=None, headless=False):
+    """Executa criação de contas — uma única instância de BrowserAutomation por run."""
+    accounts   = []
+    automation = BrowserAutomation(PLAN_CONFIGS.get(plan, PLAN_CONFIGS["1"]))
 
-    async def fill_field_instantly(self, tab, selector, text):
-        await tab.execute_script(f"document.querySelector('{selector}').focus();")
-        await asyncio.sleep(0.1)
-        escaped_text = text.replace("\\", "\\\\").replace('"', '\\"')
-        await tab.execute_script(f"document.querySelector('{selector}').value = \"{escaped_text}\";")
-        await tab.execute_script(f"document.querySelector('{selector}').dispatchEvent(new Event('input', {{ bubbles: true }}));")
-        await asyncio.sleep(0.05)
-
-    async def _interruptible_sleep(self, seconds, cancel_event):
-        elapsed = 0.0
-        while elapsed < seconds:
-            if cancel_event and cancel_event.is_set():
-                return True
-            await asyncio.sleep(0.2)
-            elapsed += 0.2
-        return False
-
-    async def _setup_ghost_mode(self, tab, log_cb, cancel_event):
-        try:
-            await tab.execute_script('document.title = "DOOM_GHOSTAPI";')
-            self.ghost = GhostModeAPI()
-            self.ghost._hide_by_title("DOOM_GHOSTAPI")
-            asyncio.create_task(self.ghost.auto_cloak_loop("DOOM_GHOSTAPI", duration=120, cancel_event=cancel_event))
-            if not _PSUTIL_OK:
-                log_cb("⚠ psutil not installed — run: pip install psutil", "warning")
-        except Exception as e:
-            log_cb(f"⚠ Erro ao esconder janela: {str(e)[:50]}", "warning")
-
-    async def register_account(self, password, browser_path, log_cb, step_cb, headless=False, cancel_event=None):
-        email = gerar_email_aleatorio()
-        first_name = self.fake.first_name()
-        last_name = self.fake.last_name()
-        options = ChromiumOptions()
-        options.browser_preferences = {
-            "profile.default_content_setting_values.notifications": 2,
-            "profile.default_content_settings.popups": 0,
-        }
-        if headless:
-            options.add_argument("--window-position=30000,30000")
-            options.add_argument("--window-size=1920,1080")
-            options.add_argument("--disable-blink-features=AutomationControlled")
-        if browser_path:
-            options.binary_location = browser_path
-        browser = Chrome(options=options)
-        tab = await browser.start()
-        if headless:
-            await self._setup_ghost_mode(tab, log_cb, cancel_event)
-        try:
-            log_cb(f"📧 Email: {email}", "info")
-            step_cb(tr('opening_browser'))
-            await tab.go_to("https://www.exitlag.com/lp/trial")
-            if await self._interruptible_sleep(2, cancel_event):
-                log_cb(f"⚠ {tr('btn_cancel')}", "warning")
-                try: await browser.stop()
-                except: pass
-                return {"email": email, "password": password, "success": False}
-            step_cb(tr('filling_form'))
-            log_cb(tr('filling_form'), "info")
-            # Clique no botão social flow (diferente do plano 7 dias)
-            await tab.execute_script("document.querySelector('#heroSocialFlow > button').click();")
-            await asyncio.sleep(1)
-            await self.fill_field_instantly(tab, '#inputFirstName', first_name)
-            await self.fill_field_instantly(tab, '#inputLastName', last_name)
-            await self.fill_field_instantly(tab, '#inputEmail', email)
-            await self.fill_field_instantly(tab, '#inputNewPassword', password)
-            await self.fill_field_instantly(tab, '#inputNewPassword2', password)
-            await asyncio.sleep(0.2)
-            await tab.execute_script("document.querySelector('#hero-terms-check').click();")
-            step_cb(tr('waiting_captcha'))
-            log_cb(tr('waiting_captcha'), "warning")
-            if await self._interruptible_sleep(5, cancel_event):
-                log_cb(f"⚠ {tr('btn_cancel')}", "warning")
-                try: await browser.stop()
-                except: pass
-                return {"email": email, "password": password, "success": False}
-            step_cb(tr('submitting_form'))
-            log_cb(tr('submitting_form'), "info")
-            await tab.execute_script("document.querySelector('#registerButton').click();")
-            if await self._interruptible_sleep(5, cancel_event):
-                log_cb(f"⚠ {tr('btn_cancel')}", "warning")
-                try: await browser.stop()
-                except: pass
-                return {"email": email, "password": password, "success": False}
-            try:
-                def _extract(result):
-                    if isinstance(result, dict):
-                        try: return result["result"]["result"]["value"]
-                        except (KeyError, TypeError): return None
-                    return result
-                current_url   = _extract(await tab.execute_script("return window.location.href;"))
-                page_title    = _extract(await tab.execute_script("return document.title;"))
-                page_body_txt = _extract(await tab.execute_script("return document.body ? document.body.innerText : '';"))
-                
-                error_text = _extract(await tab.execute_script("""
-                    const errorSelectors = ['.error', '.alert-danger', '[data-error]',
-                        '[class*="invalid-feedback"]', '.form-error', '[class*="error-msg"]',
-                        '[class*="alert-error"]'];
-                    for (const sel of errorSelectors) {
-                        const error = document.querySelector(sel);
-                        if (error && error.offsetParent !== null && error.textContent.trim()) {
-                            return error.textContent.trim();
-                        }
-                    }
-                    return null;
-                """))
-                success_el = _extract(await tab.execute_script("""
-                    const s = document.querySelector(
-                        '.success, .alert-success, [class*="success"], [class*="thank"],' +
-                        '[class*="confirm"], [class*="complete"], [class*="registered"],' +
-                        '[id*="success"], [id*="confirm"], [id*="complete"]'
-                    );
-                    return s ? s.textContent.trim() : null;
-                """))
-                
-                error_text    = str(error_text).strip()    if error_text    not in (None, "None", "") else None
-                success_el    = str(success_el).strip()    if success_el    not in (None, "None", "") else None
-                current_url   = str(current_url)           if current_url   else ""
-                page_title    = str(page_title).lower()    if page_title    else ""
-                page_body_txt = str(page_body_txt).lower() if page_body_txt else ""
-
-                log_cb(f"   🔍 URL: {current_url}", "dim")
-                log_cb(f"   🔍 Título: {page_title}", "dim")
-
-                SUCCESS_KEYWORDS = ("success", "thank", "confirm", "complete",
-                                    "registered", "account-created", "welcome",
-                                    "obrigado", "cadastro")
-                url_lower = current_url.lower()
-                success_by_url   = any(k in url_lower   for k in SUCCESS_KEYWORDS)
-                success_by_title = any(k in page_title  for k in SUCCESS_KEYWORDS)
-                success_by_body  = any(k in page_body_txt for k in
-                                       ("thank you", "successfully created",
-                                        "account created", "registration complete",
-                                        "bem-vindo", "cadastro realizado"))
-                
-                success = False
-                if success_el or success_by_url or success_by_title or success_by_body:
-                    success = True
-                    step_cb(tr('step_done'))
-                    log_cb(f"✓ {tr('registration_success')}", "success")
-                    log_cb(f"   📧 {email}", "success")
-                    log_cb(f"   🔑 {password}", "success")
-                elif error_text and "captcha" in error_text.lower():
-                    log_cb(f"✗ {tr('captcha_failed')}", "error")
-                    step_cb(tr('step_failed'))
-                elif error_text:
-                    log_cb(f"✗ {tr('error_fill_form').format(e=error_text)}", "error")
-                    step_cb(tr('step_failed'))
-                else:
-                    log_cb("✗ Não detectou indicador de sucesso — verifique URL/título acima", "error")
-                    step_cb(tr('step_failed'))
-                try:
-                    await browser.stop()
-                    await asyncio.sleep(0.5)
-                    if headless and self.ghost:
-                        if self.ghost._check_if_window_exists("DOOM_GHOSTAPI"):
-                            log_cb("⚠ Navegador ainda aberto em invisível, forçando fechamento...", "warning")
-                            self.ghost._force_close_by_title("DOOM_GHOSTAPI")
-                            await asyncio.sleep(0.5)
-                        else:
-                            log_cb("✓ Navegador fechou corretamente", "info")
-                except: pass
-                return {"email": email, "password": password, "success": success}
-            except Exception as e:
-                log_cb(f"✗ {tr('error_fill_form').format(e=str(e)[:80])}", "error")
-                step_cb(tr('step_failed'))
-                try: await browser.stop()
-                except: pass
-                return {"email": email, "password": password, "success": False}
-        except Exception as e:
-            log_cb(f"✗ {tr('error_fill_form').format(e=str(e)[:80])}", "error")
-            try: await browser.stop()
-            except: pass
-            return {"email": email, "password": password, "success": False}
-
-
-async def run_accounts(plan, passw, count, browser_path, log_cb, step_cb, done_cb, cancel_event=None, headless=False):
-    """Executa criação de contas - UMA instância da automação fora do loop"""
-    accounts = []
-    # Escolhe a classe certa baseada no plano (fora do loop)
-    if plan == "2":
-        automation = HumanizedBrowserAutomation()  # 7 dias - /lp/omen
-    else:
-        automation = Plan1BrowserAutomation()      # 3 dias - /lp/trial
-    
     for x in range(count):
         if cancel_event and cancel_event.is_set():
             log_cb(f"\n⚠ {tr('script_cancelled')}", "warning")
@@ -938,30 +996,38 @@ async def run_accounts(plan, passw, count, browser_path, log_cb, step_cb, done_c
         log_cb(f"\n{'─'*40}", "dim")
         log_cb(tr('account_counter').format(x=x+1, count=count), 'accent')
         log_cb(f"{'─'*40}", "dim")
-        result = await automation.register_account(passw, browser_path, log_cb, step_cb,
-                                                   headless=headless, cancel_event=cancel_event)
+
+        result = await automation.register_account(
+            passw, browser_path, log_cb, step_cb,
+            headless=headless, cancel_event=cancel_event,
+        )
         result["created_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         accounts.append(result)
+
         if result.get("success"):
             with open("accounts.txt", "a", encoding="utf-8") as f:
                 f.write(f"{result['email']} | {result['password']} | {result['created_at']}\n")
+
         if cancel_event and cancel_event.is_set():
-            log_cb(f"\n⚠ Script cancelled by user.", "warning")
+            log_cb(f"\n⚠ {tr('script_cancelled')}", "warning")
             break
+
         if x < count - 1:
             delay = 3
-            log_cb(f"{tr('waiting_next_account').format(delay=delay)}", "warning")
+            log_cb(tr('waiting_next_account').format(delay=delay), "warning")
             elapsed = 0.0
             while elapsed < delay:
                 if cancel_event and cancel_event.is_set():
                     break
                 await asyncio.sleep(0.2)
                 elapsed += 0.2
+
     successful = sum(1 for acc in accounts if acc["success"])
     log_cb(f"\n{'═'*40}", "dim")
     log_cb(f"✓ {tr('successfully_created_account').format(x=successful, executionCount=count)}", "success")
     log_cb(tr('credentials_saved'), "success")
     done_cb(accounts)
+
 
 # ─── PyQt6 Segmented Progress Bar ────────────────────────────────────────────
 
@@ -1234,7 +1300,7 @@ class AccountsDialog(QDialog):
                     if email:
                         accounts.append({"email": email, "password": password, "created_at": created})
 
-        self._count_label.setText(f"{len(accounts)} account(s) saved")
+        self._count_label.setText(tr("accounts_saved_count").format(count=len(accounts)))
 
         if not accounts:
             lbl = QLabel(tr('no_accounts_saved'))
@@ -1297,7 +1363,7 @@ class UpdateDialog(QDialog):
         layout.setContentsMargins(30, 30, 30, 20)
         layout.setSpacing(8)
 
-        title = QLabel("⚡ Update Available")
+        title = QLabel(tr("update_available_title"))
         title.setStyleSheet(f"color: {WARNING}; font-size: 16pt; font-weight: bold;")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
@@ -1396,7 +1462,7 @@ class UpdateDialog(QDialog):
             else:
                 req_path = os.path.join(base, "requirements.txt")
                 if os.path.exists(req_path):
-                    self.status_signal.emit("Installing dependencies...", ACCENT)
+                    self.status_signal.emit(tr("installing_dependencies"), ACCENT)
                     subprocess.run(
                         [sys.executable, "-m", "pip", "install", "-r", req_path],
                         capture_output=True
@@ -1442,6 +1508,8 @@ class App(QMainWindow):
         self._center()
         self._update_signal.connect(self._show_update)
         self._check_updates_bg()
+        self._download_missing_langs()
+        self._check_missing_deps()
         self._show_config()
 
     def _center(self):
@@ -1485,6 +1553,7 @@ class App(QMainWindow):
         LANG_FLAGS = {
             "pt": "🇧🇷", "en": "🇺🇸", "es": "🇪🇸", "fr": "🇫🇷",
             "de": "🇩🇪", "it": "🇮🇹", "ru": "🇷🇺", "ja": "🇯🇵", "zh": "🇨🇳",
+            "vi": "🇻🇳", "ar": "🇸🇦",
         }
         flag = LANG_FLAGS.get(self._current_lang, "🌐")
         lang_btn = menu_btn(f"{flag}  {tr('menu_language')}", None)
@@ -1494,22 +1563,9 @@ class App(QMainWindow):
 
         central.addWidget(menu_bar)
 
-        # Title area
-        hdr_widget = QWidget()
-        hdr_layout = QVBoxLayout(hdr_widget)
-        hdr_layout.setContentsMargins(30, 20, 30, 10)
-        hdr_layout.setSpacing(2)
-
-        title = QLabel(tr('app_title'))
-        title.setObjectName("title")
-        hdr_layout.addWidget(title)
-
-        if subtitle:
-            sub = QLabel(subtitle)
-            sub.setObjectName("subtitle")
-            hdr_layout.addWidget(sub)
-
-        central.addWidget(hdr_widget)
+        # Title area — hacker banner
+        banner = HackerBannerWidget(subtitle)
+        central.addWidget(banner)
         central.addWidget(make_separator())
         central.addSpacing(10)
 
@@ -1532,59 +1588,41 @@ class App(QMainWindow):
             ("🇩🇪  Deutsch",   "de"), ("🇮🇹  Italiano", "it"),
             ("🇷🇺  Русский",   "ru"), ("🇯🇵  日本語",   "ja"),
             ("🇨🇳  中文",      "zh"),
+            ("🇻🇳  Tiếng Việt", "vi"),
+            ("🇸🇦  العربية",   "ar"),
         ]
         menu = QMenu(self)
-        menu.setStyleSheet(f"""
-            QMenu {{
+        menu.setStyleSheet("""
+            QMenu {
                 background-color: #1e2130;
                 border: 1px solid #2e3250;
                 padding: 4px 0;
-            }}
-            QMenu::item {{
-                padding: 0;
+                font-family: 'Segoe UI Emoji', 'Segoe UI', sans-serif;
+                font-size: 10pt;
+            }
+            QMenu::item {
+                padding: 7px 20px 7px 12px;
+                color: #e0e0e0;
                 background: transparent;
-            }}
-            QMenu::item:selected {{
-                background: transparent;
-            }}
+            }
+            QMenu::item:selected {
+                background-color: #2e3250;
+                color: #ffffff;
+                border-radius: 3px;
+            }
+            QMenu::item:checked {
+                color: #00e5ff;
+                font-weight: bold;
+            }
         """)
-        emoji_font = QFont("Segoe UI Emoji", 10)
+
         for lbl, code in LANG_OPTIONS:
-            wa = QWidgetAction(menu)
-            container = QWidget()
-            container.setFixedHeight(34)
-            row = QHBoxLayout(container)
-            row.setContentsMargins(12, 0, 16, 0)
-            row.setSpacing(6)
-
-            label = QLabel(lbl)
-            label.setFont(emoji_font)
             active = (code == self._current_lang)
-            label.setStyleSheet(
-                f"color: {'#00e5ff' if active else '#e0e0e0'};"
-                f"font-weight: {'bold' if active else 'normal'};"
-                "background: transparent;"
-            )
-            check = QLabel("✓" if active else "")
-            check.setFixedWidth(14)
-            check.setStyleSheet(f"color: #00e5ff; font-weight: bold; background: transparent;")
-            row.addWidget(check)
-            row.addWidget(label)
-            row.addStretch()
-
-            def _enter(e, w=container, c=code):
-                w.setStyleSheet("background-color: #2e3250; border-radius: 3px;")
-            def _leave(e, w=container):
-                w.setStyleSheet("background: transparent;")
-            def _click(e, c=code):
-                menu.close()
-                self._set_lang(c)
-            container.enterEvent  = _enter
-            container.leaveEvent  = _leave
-            container.mousePressEvent = _click
-
-            wa.setDefaultWidget(container)
-            menu.addAction(wa)
+            text = ("✓  " if active else "     ") + lbl
+            action = menu.addAction(text)
+            action.setCheckable(True)
+            action.setChecked(active)
+            action.triggered.connect(lambda checked, c=code: self._set_lang(c))
 
         pos = btn.mapToGlobal(QPoint(0, btn.height()))
         menu.exec(pos)
@@ -1594,6 +1632,9 @@ class App(QMainWindow):
         self._current_lang = code
         base = get_base()
         path = os.path.join(base, "translations", f"{code}.json")
+        if not os.path.exists(path):
+            url = f"{GITHUB_RAW}/translations/{code}.json"
+            download_file(url, path)
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 _translation_cache = json.load(f)
@@ -1646,7 +1687,7 @@ class App(QMainWindow):
         browse_btn = make_btn(tr('btn_browse'), "secondary")
         browse_btn.setFixedWidth(100)
         def browse():
-            path, _ = QFileDialog.getOpenFileName(self, "Select Browser", "", "Executable (*.exe)")
+            path, _ = QFileDialog.getOpenFileName(self, tr("browse_dialog_title"), "", "Executable (*.exe)")
             if path:
                 browser_entry.setText(path)
         browse_btn.clicked.connect(browse)
@@ -1995,6 +2036,50 @@ class App(QMainWindow):
                 self._update_signal.emit(local, remote)
         threading.Thread(target=run, daemon=True).start()
 
+    def _download_missing_langs(self):
+        def run():
+            base = get_base()
+            for lang in TRANSLATIONS_LANGS:
+                path = os.path.join(base, "translations", f"{lang}.json")
+                if not os.path.exists(path):
+                    url = f"{GITHUB_RAW}/translations/{lang}.json"
+                    download_file(url, path)
+        threading.Thread(target=run, daemon=True).start()
+
+    def _check_missing_deps(self):
+        def run():
+            base = get_base()
+            req_path = os.path.join(base, "requirements.txt")
+            if not os.path.exists(req_path):
+                return
+            try:
+                import importlib.metadata as meta
+            except ImportError:
+                import importlib_metadata as meta
+
+            with open(req_path, "r", encoding="utf-8") as f:
+                lines = [l.strip() for l in f if l.strip() and not l.startswith("#")]
+
+            missing = []
+            for line in lines:
+                # strip version specifiers to get package name
+                pkg = line.split("==")[0].split(">=")[0].split("<=")[0].split("!=")[0].split("~=")[0].strip()
+                # normalize: pip uses dashes, importlib uses dashes too but let's try both
+                try:
+                    meta.version(pkg)
+                except Exception:
+                    try:
+                        meta.version(pkg.replace("-", "_"))
+                    except Exception:
+                        missing.append(line)
+
+            if missing:
+                subprocess.run(
+                    [sys.executable, "-m", "pip", "install"] + missing,
+                    capture_output=True
+                )
+        threading.Thread(target=run, daemon=True).start()
+
     def _show_update(self, local, remote):
         dlg = UpdateDialog(local, remote, self)
         dlg.exec()
@@ -2003,8 +2088,6 @@ class App(QMainWindow):
 # ─── Entry point ──────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    import multiprocessing
-    multiprocessing.freeze_support()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
     window = App()
