@@ -1,5 +1,5 @@
 {
-    "browser_path_prompt": "(推荐) 按回车使用默认浏览器路径（如果您安装了Chrome）",
+    "browser_path_prompt": "留空以使用默认 Chrome",
     "browser_executable_path": "浏览器可执行文件路径：",
     "password_label": "密码：",
     "proxy_label": "代理",
@@ -76,5 +76,10 @@
     "psutil_missing": "⚠ psutil 未安装 — 请运行: pip install psutil",
     "no_success_indicator": "✗ 未检测到成功标志 — 请检查上方的URL/标题",
     "browser_still_open": "⚠ 浏览器仍在后台运行，正在强制关闭...",
-    "browser_closed_ok": "✓ 浏览器已正常关闭"
+    "browser_closed_ok": "✓ 浏览器已正常关闭",
+    "ghost_hide_error": "⚠ 隐藏窗口时出错: {e}",
+    "accounts_saved_count": "已保存 {count} 个账户",
+    "update_available_title": "⚡ 有可用更新",
+    "installing_dependencies": "正在安装依赖...",
+    "browse_dialog_title": "选择浏览器"
 }

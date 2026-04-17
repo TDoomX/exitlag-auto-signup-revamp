@@ -1,5 +1,5 @@
 {
-    "browser_path_prompt": "(推奨) Chromeがインストールされている場合、デフォルトのブラウザパスを使用するにはEnterを押してください",
+    "browser_path_prompt": "空白のままにするとデフォルトのChromeを使用します",
     "browser_executable_path": "ブラウザの実行可能ファイルパス：",
     "password_label": "パスワード：",
     "proxy_label": "プロキシ",
@@ -76,5 +76,10 @@
     "psutil_missing": "⚠ psutil がインストールされていません — 実行: pip install psutil",
     "no_success_indicator": "✗ 成功の指標が見つかりません — 上記のURL/タイトルを確認してください",
     "browser_still_open": "⚠ ブラウザがまだバックグラウンドで開いています。強制終了中...",
-    "browser_closed_ok": "✓ ブラウザが正常に閉じられました"
+    "browser_closed_ok": "✓ ブラウザが正常に閉じられました",
+    "ghost_hide_error": "⚠ ウィンドウの非表示中にエラーが発生しました: {e}",
+    "accounts_saved_count": "{count} 件のアカウントが保存されました",
+    "update_available_title": "⚡ アップデートがあります",
+    "installing_dependencies": "依存関係をインストール中...",
+    "browse_dialog_title": "ブラウザを選択"
 }

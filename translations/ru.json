@@ -1,5 +1,5 @@
 {
-    "browser_path_prompt": "(РЕКОМЕНДУЕТСЯ) Нажмите Enter, чтобы использовать путь браузера по умолчанию (если у вас установлен Chrome)",
+    "browser_path_prompt": "Оставьте пустым для Chrome по умолчанию",
     "browser_executable_path": "Путь к исполнимому файлу браузера: ",
     "password_label": "Пароль:",
     "proxy_label": "Прокси",
@@ -76,5 +76,10 @@
     "psutil_missing": "⚠ psutil не установлен — выполните: pip install psutil",
     "no_success_indicator": "✗ Индикатор успеха не обнаружен — проверьте URL/заголовок выше",
     "browser_still_open": "⚠ Браузер всё ещё открыт в фоне, принудительное закрытие...",
-    "browser_closed_ok": "✓ Браузер закрыт корректно"
+    "browser_closed_ok": "✓ Браузер закрыт корректно",
+    "ghost_hide_error": "⚠ Ошибка при скрытии окна: {e}",
+    "accounts_saved_count": "Сохранено аккаунтов: {count}",
+    "update_available_title": "⚡ Доступно обновление",
+    "installing_dependencies": "Установка зависимостей...",
+    "browse_dialog_title": "Выберите браузер"
 }

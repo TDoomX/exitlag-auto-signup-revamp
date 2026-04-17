@@ -2036,16 +2036,6 @@ class App(QMainWindow):
                 self._update_signal.emit(local, remote)
         threading.Thread(target=run, daemon=True).start()
 
-    def _download_missing_langs(self):
-        def run():
-            base = get_base()
-            for lang in TRANSLATIONS_LANGS:
-                path = os.path.join(base, "translations", f"{lang}.json")
-                if not os.path.exists(path):
-                    url = f"{GITHUB_RAW}/translations/{lang}.json"
-                    download_file(url, path)
-        threading.Thread(target=run, daemon=True).start()
-
     def _check_missing_deps(self):
         def run():
             base = get_base()
@@ -2062,9 +2052,7 @@ class App(QMainWindow):
 
             missing = []
             for line in lines:
-                # strip version specifiers to get package name
                 pkg = line.split("==")[0].split(">=")[0].split("<=")[0].split("!=")[0].split("~=")[0].strip()
-                # normalize: pip uses dashes, importlib uses dashes too but let's try both
                 try:
                     meta.version(pkg)
                 except Exception:
@@ -2074,10 +2062,27 @@ class App(QMainWindow):
                         missing.append(line)
 
             if missing:
+                # Use the real Python interpreter, not the frozen exe
+                if getattr(sys, "frozen", False):
+                    python = os.path.join(os.path.dirname(sys.executable), "python.exe")
+                    if not os.path.exists(python):
+                        return  # can't pip install in frozen env without Python
+                else:
+                    python = sys.executable
                 subprocess.run(
-                    [sys.executable, "-m", "pip", "install"] + missing,
+                    [python, "-m", "pip", "install"] + missing,
                     capture_output=True
                 )
+        threading.Thread(target=run, daemon=True).start()
+
+    def _download_missing_langs(self):
+        def run():
+            base = get_base()
+            for lang in TRANSLATIONS_LANGS:
+                path = os.path.join(base, "translations", f"{lang}.json")
+                if not os.path.exists(path):
+                    url = f"{GITHUB_RAW}/translations/{lang}.json"
+                    download_file(url, path)
         threading.Thread(target=run, daemon=True).start()
 
     def _show_update(self, local, remote):
@@ -2088,6 +2093,8 @@ class App(QMainWindow):
 # ─── Entry point ──────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
+    import multiprocessing
+    multiprocessing.freeze_support()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
     window = App()

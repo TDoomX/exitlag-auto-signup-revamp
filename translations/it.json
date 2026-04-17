@@ -1,5 +1,5 @@
 {
-    "browser_path_prompt": "(RACCOMANDATO) Premi invio per utilizzare il percorso del browser predefinito (se hai Chrome installato)",
+    "browser_path_prompt": "Lascia vuoto per usare Chrome predefinito",
     "browser_executable_path": "Percorso eseguibile del browser: ",
     "password_label": "Password:",
     "proxy_label": "Proxy",
@@ -76,5 +76,10 @@
     "psutil_missing": "⚠ psutil non installato — eseguire: pip install psutil",
     "no_success_indicator": "✗ Nessun indicatore di successo trovato — controlla URL/titolo sopra",
     "browser_still_open": "⚠ Il browser è ancora aperto in background, chiusura forzata...",
-    "browser_closed_ok": "✓ Browser chiuso correttamente"
+    "browser_closed_ok": "✓ Browser chiuso correttamente",
+    "ghost_hide_error": "⚠ Errore durante la chiusura della finestra: {e}",
+    "accounts_saved_count": "{count} account salvato/i",
+    "update_available_title": "⚡ Aggiornamento disponibile",
+    "installing_dependencies": "Installazione delle dipendenze...",
+    "browse_dialog_title": "Seleziona browser"
 }
