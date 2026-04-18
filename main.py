@@ -578,7 +578,7 @@ class HackerBannerWidget(QWidget):
         if self._tick % 6 == 0:
             self._cursor_on = not self._cursor_on
 
-        # glitch rápido a cada ~2 s
+        # quick glitch every ~2 s
         if self._tick % 25 == 0:
             self._glitch_on = True
             self._glitch_x  = random.randint(-4, 4)
@@ -586,13 +586,13 @@ class HackerBannerWidget(QWidget):
             self._glitch_on = False
             self._glitch_x  = 0
 
-        # injeta ruído aleatório
+        # inject random noise
         if self._tick % 4 == 0 and random.random() < 0.6:
             r = random.randrange(len(self._ASCII))
             c = random.randrange(len(self._ASCII[r]))
             self._noise[(r, c)] = (random.choice(self._NOISE_CHARS), 3)
 
-        # decrementa TTL do ruído
+        # decrement noise TTL
         dead = [k for k, (ch, ttl) in self._noise.items() if ttl <= 1]
         for k in dead:
             del self._noise[k]
@@ -632,7 +632,7 @@ class HackerBannerWidget(QWidget):
         x0       = max(10, (W - total_w) // 2)
         y0       = 12
 
-        # cores base cycling — verde/ciano como terminal antigo
+        # base color cycling — green/cyan like an old terminal
         t        = self._tick
         r_base   = int(0 + 10 * math.sin(t * 0.05))
         g_base   = int(180 + 30 * math.sin(t * 0.03))
@@ -640,7 +640,7 @@ class HackerBannerWidget(QWidget):
         base_col = QColor(max(0,r_base), min(255,g_base), min(255,b_base))
 
         glitch_col  = QColor(255, 50,  80)   # vermelho no glitch
-        noise_col   = QColor(80,  255, 120)  # verde brilhante p/ ruído
+        noise_col   = QColor(80,  255, 120)  # bright green for noise
         dim_col     = QColor(0,   100, 130)  # chars apagados
 
         for row_i, line in enumerate(self._ASCII):
@@ -669,7 +669,7 @@ class HackerBannerWidget(QWidget):
                 p.setPen(col)
                 p.drawText(cx, cy + ch_h - fm.descent(), ch)
 
-        # linha decorativa abaixo do ASCII
+        # decorative line below the ASCII art
         deco_y = y0 + rows * ch_h + 3
         grad = QLinearGradient(x0, deco_y, x0 + total_w, deco_y)
         grad.setColorAt(0.0, QColor(0, 0, 0, 0))
@@ -690,7 +690,7 @@ class HackerBannerWidget(QWidget):
             tw      = sfm.horizontalAdvance(txt)
             sx      = max(10, (W - tw) // 2)
             sy      = deco_y + 14
-            # sombra glow
+            # glow shadow
             glow    = QColor(0, 200, 255, 40)
             p.setPen(glow)
             for dx in (-1, 0, 1):
@@ -731,8 +731,8 @@ def open_loader():
 
 PLAN_CONFIGS = {
     "1": {
-        "url":       "https://www.exitlag.com/lp/trial",
-        "email_fn":  "gerar_email_aleatorio",
+        "url":         "https://www.exitlag.com/lp/trial",
+        "email_fn":    "gerar_email_aleatorio",
         "selectors": {
             "first":    "#inputFirstName",
             "last":     "#inputLastName",
@@ -741,12 +741,15 @@ PLAN_CONFIGS = {
             "confirm":  "#inputNewPassword2",
             "tos":      "#hero-terms-check",
         },
-        "pre_click": "#heroSocialFlow > button",
-        "pre_delay": 1.0,
+        "pre_click":   "#heroSocialFlow > button",
+        "pre_delay":   1.0,
+        "success_url": "exitlag.com/lp/trial/success",
+        "success_txt": "your account has been created",
+        "submit_fn":   "onLpRegister",
     },
     "2": {
-        "url":       "https://www.exitlag.com/lp/omen",
-        "email_fn":  "gerar_email_plan2",
+        "url":         "https://www.exitlag.com/lp/omen",
+        "email_fn":    "gerar_email_plan2",
         "selectors": {
             "first":    "#firstName",
             "last":     "#lastName",
@@ -755,8 +758,11 @@ PLAN_CONFIGS = {
             "confirm":  "#confirmPassword",
             "tos":      "#acceptTos",
         },
-        "pre_click": None,
-        "pre_delay": 0.0,
+        "pre_click":   None,
+        "pre_delay":   0.0,
+        "success_url": "account_created=1",
+        "success_txt": "soon you will recieve an e-mail from exitlag",
+        "submit_fn":   None,
     },
 }
 
@@ -859,7 +865,7 @@ class BrowserAutomation:
             step_cb(tr('filling_form'))
             log_cb(tr('filling_form'), "info")
 
-            # pre_click: botão extra que o trial exige antes de exibir o form
+            # pre_click: extra button the trial page requires before showing the form
             if cfg["pre_click"]:
                 await tab.execute_script(
                     f"document.querySelector('{cfg['pre_click']}').click();"
@@ -882,7 +888,14 @@ class BrowserAutomation:
 
             step_cb(tr('submitting_form'))
             log_cb(tr('submitting_form'), "info")
-            await tab.execute_script("document.querySelector('#registerButton').click();")
+            _submit_fn = cfg.get("submit_fn")
+            if _submit_fn:
+                # Button uses reCAPTCHA callback — calling it directly ensures the submit
+                await tab.execute_script(f"document.querySelector('#registerButton').click();")
+                await asyncio.sleep(0.5)
+                await tab.execute_script(f"if(typeof {_submit_fn}==='function') {_submit_fn}('dummy-token');")
+            else:
+                await tab.execute_script("document.querySelector('#registerButton').click();")
 
             if await self._interruptible_sleep(5, cancel_event):
                 _early_exit(); await _safe_stop()
@@ -929,19 +942,28 @@ class BrowserAutomation:
                 page_title    = str(page_title).lower()    if page_title    else ""
                 page_body_txt = str(page_body_txt).lower() if page_body_txt else ""
 
+                # exact plan signals — highest priority
+                _success_url = cfg.get("success_url", "").lower()
+                _success_txt = cfg.get("success_txt", "").lower()
+                url_lower    = current_url.lower()
+                body_lower   = page_body_txt.lower()
+
+                exact_url = bool(_success_url and _success_url in url_lower)
+                exact_txt = bool(_success_txt and _success_txt in body_lower)
+
+                # generic fallback
                 SUCCESS_KEYWORDS = ("success", "thank", "confirm", "complete",
                                     "registered", "account-created", "welcome",
                                     "obrigado", "cadastro")
-                url_lower        = current_url.lower()
-                success_by_url   = any(k in url_lower     for k in SUCCESS_KEYWORDS)
-                success_by_title = any(k in page_title    for k in SUCCESS_KEYWORDS)
-                success_by_body  = any(k in page_body_txt for k in (
+                success_by_url   = any(k in url_lower  for k in SUCCESS_KEYWORDS)
+                success_by_title = any(k in page_title for k in SUCCESS_KEYWORDS)
+                success_by_body  = any(k in body_lower for k in (
                     "thank you", "successfully created", "account created",
                     "registration complete", "bem-vindo", "cadastro realizado"
                 ))
 
                 success = False
-                if success_el or success_by_url or success_by_title or success_by_body:
+                if exact_url or exact_txt or success_el or success_by_url or success_by_title or success_by_body:
                     success = True
                     step_cb(tr('step_done'))
                     log_cb(f"✓ {tr('registration_success')}", "success")
@@ -1855,7 +1877,7 @@ class App(QMainWindow):
                     thread.quit()
                     thread.wait(5000)
             except RuntimeError:
-                pass  # objeto C++ já deletado pelo deleteLater — normal
+                pass  # C++ object already deleted by deleteLater — expected
         self._thread = None
         self._worker = None
 
@@ -1944,7 +1966,7 @@ class App(QMainWindow):
         }
         self._step_map = STEP_MAP
 
-        # Encerrar thread anterior se ainda estiver rodando
+        # Stop previous thread if still running
         self._cleanup_thread()
 
         # Launch worker thread
@@ -1956,7 +1978,7 @@ class App(QMainWindow):
         self._worker.log_signal.connect(lambda m, l: self._log_queue.put(("log", m, l)))
         self._worker.step_signal.connect(lambda m: self._log_queue.put(("step", m, None)))
         self._worker.done_signal.connect(lambda a: self._log_queue.put(("done", a, None)))
-        # Encerrar o thread limpo quando o worker terminar
+        # Clean thread shutdown when worker finishes
         self._worker.done_signal.connect(self._thread.quit)
         self._thread.finished.connect(self._thread.deleteLater)
         self._thread.start()
