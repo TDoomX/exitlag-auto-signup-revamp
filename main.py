@@ -13,6 +13,7 @@ import queue
 from datetime import datetime
 import atexit
 import random
+import urllib.request
 import string
 import locale
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QTextEdit, QRadioButton, QButtonGroup, QFrame, QFileDialog, QScrollArea, QMenu, QDialog, QProgressBar, QSizePolicy, QMessageBox
@@ -1235,6 +1236,7 @@ class UpdateDialog(QDialog):
         elif mode.startswith('py:'):
             subprocess.Popen([sys.executable, mode[3:]])
         QApplication.instance().quit()
+        os._exit(0)
 
     def _on_status(self, text, color):
         self._status.setText(text)
