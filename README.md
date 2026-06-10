@@ -52,7 +52,7 @@ Generated credentials are automatically saved to `accounts.txt`.
 
 ## Supported Languages
 
-Portuguese, English, Spanish, French, German, Italian, Russian, Japanese, Chinese
+Portuguese, English, Spanish, French, German, Italian, Russian, Japanese, Chinese, Vietnamese, Arabic
 
 ## Author
 
