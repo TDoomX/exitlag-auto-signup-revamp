@@ -8,10 +8,14 @@ A tool to automate account creation on ExitLag, with support for multiple plans,
 ## Features
 
 - Automatic account creation for 3-day and 7-day plans
-- Supports any Chromium-based browser (Chrome, Brave, etc.)
+- Supports Chrome, Brave and Opera GX
 - Password complexity checker with random password generation
 - Proxy support with connectivity test
-- Automatic system language detection
+- Fill speed control (slow, fast, superfast)
+- Browser path saved per browser — no need to re-select on next run
+- Silent mode (headless) with Ghost Mode — hides the browser window by process ID
+- Close after delay control — choose whether the browser closes after each account and with how much delay
+- Automatic system language detection (11 languages)
 - Configuration saving for reuse
 - Automatic update checker
 - No webdriver required
@@ -41,18 +45,25 @@ python main.py
 
 ## Usage
 
-On startup, the script will prompt for:
-- Browser path (Chrome or Brave or any chromium-based browser)
+On startup the app will prompt for:
+- Browser (Chrome, Brave or Opera GX)
 - Password (or generates one randomly)
 - Proxy (optional)
 - Number of accounts to create
-- Desired plan (3 or 7 days)
+- Desired plan (3-day trial or 7-day OMEN)
+- Fill speed
+- Silent mode
+- Close after
 
 Generated credentials are automatically saved to `accounts.txt`.
 
 ## Supported Languages
 
 Portuguese, English, Spanish, French, German, Italian, Russian, Japanese, Chinese, Vietnamese, Arabic
+
+## Lite Version
+
+Looking for a lightweight CLI version with no graphical interface? Check out [exitlag-auto-signup-revamp-lite](https://github.com/TDoomX/exitlag-auto-signup-revamp-lite).
 
 ## Author
 
