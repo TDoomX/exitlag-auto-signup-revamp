@@ -1,0 +1,47 @@
+
+QWidget {{
+    font-family: '{{FONT}}';
+    font-size: 10pt;
+}}
+QLabel#fieldLabel {{
+    font-size: 7pt;
+}}
+QPushButton#menuBtn {{
+    font-family: '{{FONT}}';
+}}
+QPushButton#primary, QPushButton#secondary, QPushButton#danger,
+QPushButton#success, QPushButton#warning, QPushButton#loaderBtn {{
+    background: transparent;
+    border: none;
+    padding: 0px;
+    border-radius: 0px;
+}}
+QLineEdit, QSpinBox {{
+    background-color: #1a1a1a;
+    border: 2px solid #000000;
+    border-top-color:    #383838;
+    border-left-color:   #383838;
+    border-right-color:  #a0a0a0;
+    border-bottom-color: #a0a0a0;
+    border-radius: 0px;
+    color: #e0e0e0;
+    font-family: '{{FONT}}';
+    padding: 6px 8px;
+}}
+QLineEdit:focus, QSpinBox:focus {{
+    border-top-color:    #4444aa;
+    border-left-color:   #4444aa;
+    border-right-color:  #aaaaff;
+    border-bottom-color: #aaaaff;
+}}
+QTextEdit#logText {{
+    background-color: #111111;
+    border: 2px solid #000000;
+    border-top-color:    #383838;
+    border-left-color:   #383838;
+    border-right-color:  #a0a0a0;
+    border-bottom-color: #a0a0a0;
+    border-radius: 0px;
+    font-family: '{{FONT}}';
+    color: #cccccc;
+}}
