@@ -1,69 +1,51 @@
 > [!WARNING]
 > Usage of this tool is entirely at your own risk. The author assumes no responsibility for any adverse consequences that may arise from its use.
 
+
 # ExitLag Auto Signup
 
 A tool to automate account creation on ExitLag, with support for multiple plans, automatic language detection, and a self-update system.
 
 ## Features
 
-- Automatic account creation for 3-day and 7-day plans
-- Supports Chrome, Brave and Opera GX
-- Password complexity checker with random password generation
-- Proxy support with connectivity test
-- Fill speed control (slow, fast, superfast)
-- Browser path saved per browser — no need to re-select on next run
-- Silent mode (headless) with Ghost Mode — hides the browser window by process ID
-- Close after delay control — choose whether the browser closes after each account and with how much delay
-- Automatic system language detection (11 languages)
-- Configuration saving for reuse
-- Automatic update checker
-- No webdriver required
+- Automatically creates **3-day** and **7-day** ExitLag accounts
+- Works with **Chrome**, **Brave**, and **Opera GX**
+- Native browser automation (no WebDriver required)
+- Built-in temporary email for **2FA verification**
+- Four speed modes: **Slow**, **Normal**, **Fast**, and **Super Fast**
+- Automatically retries if a **Low Score** occurs during verification
+- **Batch Mode** to create multiple accounts at the same time
+- Three built-in themes: **Hacker**, **Minecraft**, and **Valorant**
+- **Stealth** and **Vanish** modes for a cleaner experience
+- Optional proxy support with connection test
+- Secure password generation
+- Automatic updates
+- Automatically detects your language (**11 supported languages**)
 
 ## Installation
+> [!WARNING]
+> **Do NOT** download only `mainrev.exe`. Always download and extract the **entire ZIP** from the [Releases](https://github.com/TDoomX/exitlag-auto-signup-revamp/releases) page and run `mainrev.exe`. 
 
-### Option A — Executable (no Python required)
+No installation or extra software is required.
 
-Download the latest release zip from the [Releases](https://github.com/TDoomX/exitlag-auto-signup-revamp/releases) page, extract everything and run `mainrev.exe` directly. No dependencies needed.
-
-### Option B — Run from source
-
-**1. Clone the repository:**
-```shell
-git clone https://github.com/TDoomX/exitlag-auto-signup-revamp
-```
-
-**2. Install dependencies:**
-```shell
-pip install -r requirements.txt
-```
-
-**3. Run:**
-```shell
-python main.py
-```
+> [!NOTE]
+> Depending on your antivirus settings, you may need to temporarily disable **Windows Defender Real-time protection** before running the application.
 
 ## Usage
 
-On startup the app will prompt for:
-- Browser (Chrome, Brave or Opera GX)
-- Password (or generates one randomly)
-- Proxy (optional)
-- Number of accounts to create
-- Desired plan (3-day trial or 7-day OMEN)
-- Fill speed
-- Silent mode
-- Close after
+Choose your browser, plan, password, and speed. You can also enable **Batch Mode**, **Stealth**, **Vanish**, or use a **Proxy** if needed.
 
-Generated credentials are automatically saved to `accounts.txt`.
+If ExitLag asks for a 2FA code, simply use the built-in **Mailbox** feature to receive the verification email.
+
+All created accounts are automatically saved to `accounts.txt`.
 
 ## Supported Languages
 
-Portuguese, English, Spanish, French, German, Italian, Russian, Japanese, Chinese, Vietnamese, Arabic
+Portuguese, English, Spanish, French, German, Italian, Russian, Japanese, Chinese, Vietnamese, and Arabic.
 
 ## Lite Version
 
-Looking for a lightweight CLI version with no graphical interface? Check out [exitlag-auto-signup-revamp-lite](https://github.com/TDoomX/exitlag-auto-signup-revamp-lite).
+Looking for a lightweight CLI version? Check out [exitlag-auto-signup-revamp-lite](https://github.com/TDoomX/exitlag-auto-signup-revamp-lite).
 
 ## Author
 
