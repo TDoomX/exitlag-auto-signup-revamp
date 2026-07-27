@@ -23,7 +23,7 @@ A tool to automate account creation on ExitLag, with support for multiple plans,
 - Automatically detects your language (**11 supported languages**)
 
 ## Installation
-> [!WARNING]
+> [!IMPORTANT]
 > **Do NOT** download only `mainrev.exe`. Always download and extract the **entire ZIP** from the [Releases](https://github.com/TDoomX/exitlag-auto-signup-revamp/releases) page and run `mainrev.exe`. 
 
 No installation or extra software is required.
