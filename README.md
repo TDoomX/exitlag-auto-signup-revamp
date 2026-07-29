@@ -6,6 +6,10 @@
 
 A tool to automate account creation on ExitLag, with support for multiple plans, automatic language detection, and a self-update system.
 
+## Credits
+
+Originally based on [qing762's ExitLag Auto Signup](https://github.com/qing762/exitLag-auto-signup).
+
 ## Features
 
 - Automatically creates **3-day** and **7-day** ExitLag accounts
@@ -42,10 +46,6 @@ All created accounts are automatically saved to `accounts.txt`.
 ## Supported Languages
 
 Portuguese, English, Spanish, French, German, Italian, Russian, Japanese, Chinese, Vietnamese, and Arabic.
-
-## Lite Version
-
-Looking for a lightweight CLI version? Check out [exitlag-auto-signup-revamp-lite](https://github.com/TDoomX/exitlag-auto-signup-revamp-lite).
 
 ## Author
 
