@@ -1,0 +1,191 @@
+
+QWidget {{
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    font-size: 9pt;
+    color: #000000;
+    background-color: #ece9d8;
+}}
+QMainWindow, QDialog, QWidget#root {{
+    background-color: #ece9d8;
+}}
+/* ── Menu bar ──────────────────────────────────────── */
+QWidget#menuBar {{
+    background-color: #d4d0c8;
+    border-bottom: 1px solid #aca899;
+}}
+QPushButton#menuBtn {{
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    font-size: 9pt;
+    color: #0a246a;
+    background: transparent;
+    border: none;
+    padding: 4px 10px;
+}}
+QPushButton#menuBtn:hover {{
+    background-color: #c8d4e8;
+    border: 1px solid #7a96c8;
+}}
+/* ── Botões principais — relevo 3D raised ──────────── */
+QPushButton#primary, QPushButton#secondary,
+QPushButton#danger,  QPushButton#success,
+QPushButton#warning, QPushButton#loaderBtn {{
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    font-size: 9pt;
+    background-color: #d4d0c8;
+    color: #000000;
+    border-style: solid;
+    border-width: 2px;
+    border-top-color:    #ffffff;
+    border-left-color:   #ffffff;
+    border-right-color:  #404040;
+    border-bottom-color: #404040;
+    border-radius: 0px;
+    padding: 4px 16px;
+    min-height: 22px;
+}}
+QPushButton#primary:hover, QPushButton#secondary:hover,
+QPushButton#danger:hover,  QPushButton#success:hover,
+QPushButton#warning:hover, QPushButton#loaderBtn:hover {{
+    background-color: #dce8f8;
+}}
+QPushButton#primary:pressed, QPushButton#secondary:pressed,
+QPushButton#danger:pressed,  QPushButton#success:pressed,
+QPushButton#warning:pressed, QPushButton#loaderBtn:pressed {{
+    border-top-color:    #404040;
+    border-left-color:   #404040;
+    border-right-color:  #ffffff;
+    border-bottom-color: #ffffff;
+    background-color: #d4d0c8;
+}}
+QPushButton#primary:disabled, QPushButton#secondary:disabled,
+QPushButton#danger:disabled,  QPushButton#success:disabled,
+QPushButton#warning:disabled, QPushButton#loaderBtn:disabled {{
+    color: #aca899;
+    background-color: #ece9d8;
+}}
+/* ── Campos de texto — sunken (invertido ao raised) ── */
+QLineEdit, QSpinBox, QTextEdit#logText {{
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    font-size: 9pt;
+    background-color: #ffffff;
+    color: #000000;
+    border-style: solid;
+    border-width: 2px;
+    border-top-color:    #404040;
+    border-left-color:   #404040;
+    border-right-color:  #ffffff;
+    border-bottom-color: #ffffff;
+    border-radius: 0px;
+    padding: 2px 4px;
+    selection-background-color: #0a246a;
+    selection-color: #ffffff;
+}}
+QLineEdit:focus, QSpinBox:focus {{
+    border-top-color:    #316ac5;
+    border-left-color:   #316ac5;
+    border-right-color:  #7eb4ea;
+    border-bottom-color: #7eb4ea;
+}}
+/* ── Labels ───────────────────────────────────────── */
+QLabel {{
+    background: transparent;
+    color: #000000;
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+}}
+QLabel#fieldLabel {{
+    font-size: 8pt;
+    color: #444444;
+}}
+/* ── Checkboxes / RadioButtons ────────────────────── */
+QCheckBox, QRadioButton {{
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    font-size: 9pt;
+    color: #000000;
+    background: transparent;
+    spacing: 5px;
+}}
+QCheckBox::indicator, QRadioButton::indicator {{
+    width: 13px;
+    height: 13px;
+}}
+QCheckBox::indicator:unchecked {{
+    border: 2px solid;
+    border-top-color:    #404040;
+    border-left-color:   #404040;
+    border-right-color:  #ffffff;
+    border-bottom-color: #ffffff;
+    background: #ffffff;
+}}
+QCheckBox::indicator:checked {{
+    border: 2px solid;
+    border-top-color:    #404040;
+    border-left-color:   #404040;
+    border-right-color:  #ffffff;
+    border-bottom-color: #ffffff;
+    background: #ffffff;
+    image: none;
+}}
+/* ── Scrollbar ────────────────────────────────────── */
+QScrollBar:vertical {{
+    background: #d4d0c8;
+    width: 16px;
+    border: 1px solid #aca899;
+}}
+QScrollBar::handle:vertical {{
+    background: #d4d0c8;
+    border-style: solid;
+    border-width: 1px;
+    border-top-color:    #ffffff;
+    border-left-color:   #ffffff;
+    border-right-color:  #404040;
+    border-bottom-color: #404040;
+    min-height: 20px;
+}}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+    background: #d4d0c8;
+    border-style: solid;
+    border-width: 1px;
+    border-top-color:    #ffffff;
+    border-left-color:   #ffffff;
+    border-right-color:  #404040;
+    border-bottom-color: #404040;
+    height: 16px;
+}}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
+    background: none;
+}}
+/* ── GroupBox ─────────────────────────────────────── */
+QGroupBox {{
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    font-size: 9pt;
+    color: #000000;
+    border: 2px solid;
+    border-top-color:    #404040;
+    border-left-color:   #404040;
+    border-right-color:  #ffffff;
+    border-bottom-color: #ffffff;
+    margin-top: 8px;
+    padding-top: 4px;
+}}
+QGroupBox::title {{
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 4px;
+    background-color: #ece9d8;
+    color: #000000;
+}}
+/* ── ComboBox ─────────────────────────────────────── */
+QComboBox {{
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    font-size: 9pt;
+    background-color: #ffffff;
+    color: #000000;
+    border-style: solid;
+    border-width: 2px;
+    border-top-color:    #404040;
+    border-left-color:   #404040;
+    border-right-color:  #ffffff;
+    border-bottom-color: #ffffff;
+    border-radius: 0px;
+    padding: 2px 4px;
+}}

@@ -1,0 +1,109 @@
+QWidget {{
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+    font-size: 10pt;
+    letter-spacing: 0.03em;
+}}
+QLabel#title {{
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+    font-size: 18pt;
+    font-weight: bold;
+    color: {R};
+    letter-spacing: 0.12em;
+}}
+QLabel#fieldLabel {{
+    font-size: 8pt;
+    color: {DIM};
+    letter-spacing: 0.12em;
+    font-weight: bold;
+}}
+QLineEdit, QSpinBox {{
+    background-color: {BG3};
+    border: 1px solid {BRD};
+    border-radius: 0px;
+    color: {TXT};
+    padding: 7px 10px;
+    font-size: 10pt;
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+    font-weight: 600;
+}}
+QLineEdit:focus, QSpinBox:focus {{
+    border-color: {R};
+}}
+QTextEdit#logText {{
+    background-color: {BG3};
+    border: 1px solid {BRD};
+    border-left: 2px solid {R};
+    border-radius: 0px;
+    font-family: 'Consolas', monospace;
+    font-size: 9pt;
+    color: {TXT};
+}}
+QFrame#card {{
+    background-color: {BG2};
+    border: 1px solid {BRD};
+    border-radius: 0px;
+}}
+QFrame#separator {{ background-color: {R}; max-height: 1px; }}
+QPushButton#menuBtn {{
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: {DIM};
+    font-size: 9pt;
+}}
+QPushButton#menuBtn:hover {{
+    color: {R};
+    background-color: {BG2};
+}}
+QPushButton#primary, QPushButton#secondary, QPushButton#danger,
+QPushButton#success, QPushButton#warning, QPushButton#loaderBtn {{
+    background: transparent;
+    border: none;
+    padding: 0px;
+    border-radius: 0px;
+}}
+QScrollBar:vertical {{
+    background: {BG2};
+    width: 6px;
+    border-radius: 0px;
+}}
+QScrollBar::handle:vertical {{
+    background: {R};
+    border-radius: 0px;
+    min-height: 20px;
+}}
+QScrollBar::handle:vertical:hover {{ background: #ff7080; }}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{ height: 0px; }}
+QMenu {{
+    background-color: {BG2};
+    color: {TXT};
+    border: 1px solid {BRD};
+    border-radius: 0px;
+    padding: 4px;
+}}
+QMenu::item {{ padding: 6px 20px; border-radius: 0px; }}
+QMenu::item:selected {{ background-color: {BG3}; color: {R}; }}
+QRadioButton::indicator {{
+    border-radius: 0px;
+    border: 2px solid {BRD};
+    background-color: {BG3};
+}}
+QRadioButton::indicator:checked {{
+    background-color: {R};
+    border-color: {R};
+}}
+QCheckBox::indicator {{
+    width: 16px;
+    height: 16px;
+    border-radius: 0px;
+    border: 2px solid {BRD};
+    background-color: {BG3};
+}}
+QCheckBox::indicator:hover {{
+    border-color: {R};
+}}
+QCheckBox::indicator:checked {{
+    background-color: {R};
+    border-color: {R};
+    image: none;
+}}
