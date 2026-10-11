@@ -504,7 +504,7 @@ async def register_accounts(passw: str, execution_count: int, browser_path: str 
 
         if x < execution_count - 1:
             delay = random.uniform(5, 10)
-            console.print(f"[yellow]{tr('waiting_next_account').format(delay=delay):.0f}s[/yellow]")
+            console.print(f"[yellow]{tr('waiting_next_account').format(delay=delay)}[/yellow]")
             await asyncio.sleep(delay)
 
     with open("accounts.txt", "a") as f:
