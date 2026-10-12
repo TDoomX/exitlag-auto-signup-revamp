@@ -357,6 +357,8 @@
   "tut_nav_done": "اكتمل ✓",
   "confirm_turbo_title": "وضع TURBO",
   "confirm_turbo_text": "يملأ Turbo النماذج بأقصى سرعة.\n\nقد يُشغِّل كشف الروبوت. هل تريد المتابعة؟",
+  "confirm_autopatch_title": "AutoPatch — كيف يعمل",
+  "confirm_autopatch_text": "يتولى AutoPatch إدارة الفترة التجريبية لـ ExitLag تلقائيًا، حتى تتمكن من تشغيل ExitLag مباشرةً من اختصار سطح المكتب دون الحاجة إلى فتح هذه الأداة في كل مرة. عند التبديل بين الحسابات، يكتشف AutoPatch التغيير ويعيد تشغيل ExitLag تلقائيًا. لن تحتاج أيضًا إلى إنشاء رمز تسلسلي جديد في كل مرة، لأن AutoPatch يتولى ذلك نيابةً عنك.\n\nملاحظة: ستظل بحاجة إلى إنشاء حساب جديد كلما انتهت الفترة التجريبية.",
   "confirm_btn_no": "لا",
   "confirm_btn_yes": "نعم",
   "confirm_btn_yes_dont_ask": "نعم، لا تسأل مجددًا",

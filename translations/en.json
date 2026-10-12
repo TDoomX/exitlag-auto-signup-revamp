@@ -357,6 +357,8 @@
   "tut_nav_done": "Done ✓",
   "confirm_turbo_title": "TURBO MODE",
   "confirm_turbo_text": "Turbo fills forms at maximum speed.\n\nThis may trigger reCAPTCHA detection and cause the script to fail.\n\nDo you want to continue?",
+  "confirm_autopatch_title": "AutoPatch — How it works",
+  "confirm_autopatch_text": "AutoPatch automatically handles the ExitLag trial, so you can launch ExitLag directly from your desktop shortcut without opening this tool every time. When you switch accounts, it detects the change and restarts ExitLag automatically. You also don't need to generate a new serial every time, as AutoPatch handles that for you.\n\nNote: You'll still need to create a new account whenever your trial expires.",
   "confirm_btn_no": "No",
   "confirm_btn_yes": "Yes",
   "confirm_btn_yes_dont_ask": "Yes, don't ask again",

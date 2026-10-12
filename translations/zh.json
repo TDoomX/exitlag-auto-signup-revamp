@@ -357,6 +357,8 @@
   "tut_nav_done": "完成 ✓",
   "confirm_turbo_title": "极速模式",
   "confirm_turbo_text": "极速模式以最快速度填写表单。\n\n这可能触发reCAPTCHA检测并导致脚本失败。\n\n是否继续？",
+  "confirm_autopatch_title": "AutoPatch — 工作原理",
+  "confirm_autopatch_text": "AutoPatch 会自动管理 ExitLag 的试用期，这样你就可以直接通过桌面快捷方式启动 ExitLag，无需每次都打开此工具。切换账户时，AutoPatch 会检测到变化并自动重新启动 ExitLag。你也不需要每次都生成新的序列号，AutoPatch 会自动帮你处理。\n\n注意：试用期到期后，你仍然需要创建一个新账户。",
   "confirm_btn_no": "否",
   "confirm_btn_yes": "是",
   "confirm_btn_yes_dont_ask": "是，不再询问",

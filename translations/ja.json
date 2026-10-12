@@ -357,6 +357,8 @@
   "tut_nav_done": "完了 ✓",
   "confirm_turbo_title": "ターボモード",
   "confirm_turbo_text": "ターボはフォームを最高速度で入力します。\n\nBot検出が作動する可能性があります。続けますか？",
+  "confirm_autopatch_title": "AutoPatch — 仕組み",
+  "confirm_autopatch_text": "AutoPatchがExitLagの試用期間を自動的に管理するため、毎回このツールを開かなくても、デスクトップのショートカットから直接ExitLagを起動できます。アカウントを切り替えると、AutoPatchが変更を検知してExitLagを自動的に再起動します。シリアル番号も毎回新しく作成する必要はなく、AutoPatchが自動的に処理します。\n\n注意：試用期間が終了するたびに、新しいアカウントを作成する必要があります。",
   "confirm_btn_no": "いいえ",
   "confirm_btn_yes": "はい",
   "confirm_btn_yes_dont_ask": "はい、次回から確認しない",

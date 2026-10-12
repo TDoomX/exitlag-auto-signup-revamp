@@ -357,6 +357,8 @@
   "tut_nav_done": "Hoàn thành ✓",
   "confirm_turbo_title": "CHẾ ĐỘ TURBO",
   "confirm_turbo_text": "Turbo điền biểu mẫu với tốc độ tối đa.\n\nCó thể kích hoạt phát hiện bot. Tiếp tục?",
+  "confirm_autopatch_title": "AutoPatch — Cách hoạt động",
+  "confirm_autopatch_text": "AutoPatch tự động quản lý thời gian dùng thử ExitLag, giúp bạn khởi chạy ExitLag trực tiếp từ lối tắt trên màn hình mà không cần mở công cụ này mỗi lần. Khi bạn chuyển đổi tài khoản, AutoPatch sẽ phát hiện thay đổi và tự động khởi động lại ExitLag. Bạn cũng không cần tạo mã sê-ri mới mỗi lần vì AutoPatch sẽ xử lý việc đó cho bạn.\n\nLưu ý: Bạn vẫn cần tạo tài khoản mới mỗi khi thời gian dùng thử hết hạn.",
   "confirm_btn_no": "Không",
   "confirm_btn_yes": "Có",
   "confirm_btn_yes_dont_ask": "Có, đừng hỏi lại",

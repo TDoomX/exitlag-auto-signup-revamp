@@ -357,6 +357,8 @@
   "tut_nav_done": "Fertig ✓",
   "confirm_turbo_title": "TURBO-MODUS",
   "confirm_turbo_text": "Turbo füllt Formulare mit maximaler Geschwindigkeit aus.\n\nDies kann die reCAPTCHA-Erkennung auslösen und das Skript zum Fehlschlagen bringen.\n\nMöchten Sie fortfahren?",
+  "confirm_autopatch_title": "AutoPatch — So funktioniert es",
+  "confirm_autopatch_text": "AutoPatch verwaltet die ExitLag-Testphase automatisch. So kannst du ExitLag direkt über die Desktop-Verknüpfung starten, ohne dieses Tool jedes Mal öffnen zu müssen. Wenn du das Konto wechselst, erkennt AutoPatch die Änderung und startet ExitLag automatisch neu. Du musst auch nicht jedes Mal eine neue Seriennummer erstellen, da AutoPatch das für dich übernimmt.\n\nHinweis: Du musst weiterhin ein neues Konto erstellen, wenn deine Testphase abläuft.",
   "confirm_btn_no": "Nein",
   "confirm_btn_yes": "Ja",
   "confirm_btn_yes_dont_ask": "Ja, nicht mehr fragen",

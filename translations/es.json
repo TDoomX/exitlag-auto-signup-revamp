@@ -357,6 +357,8 @@
   "tut_nav_done": "Completado ✓",
   "confirm_turbo_title": "MODO TURBO",
   "confirm_turbo_text": "El Turbo completa los formularios a la velocidad máxima.\n\nEsto puede activar la detección de reCAPTCHA y hacer que el script falle.\n\n¿Deseas continuar?",
+  "confirm_autopatch_title": "AutoPatch — Cómo funciona",
+  "confirm_autopatch_text": "AutoPatch gestiona automáticamente el período de prueba de ExitLag, para que puedas iniciarlo directamente desde el acceso directo del escritorio sin abrir esta herramienta cada vez. Cuando cambias de cuenta, detecta el cambio y reinicia ExitLag automáticamente. Tampoco necesitas generar un nuevo número de serie cada vez, ya que AutoPatch se encarga de ello.\n\nNota: Seguirás necesitando crear una cuenta nueva cada vez que expire tu período de prueba.",
   "confirm_btn_no": "No",
   "confirm_btn_yes": "Sí",
   "confirm_btn_yes_dont_ask": "Sí, no preguntar de nuevo",
