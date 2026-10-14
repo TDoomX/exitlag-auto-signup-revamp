@@ -3,3 +3,6 @@ faker==25.2.0
 pydoll-python
 PyQt6
 psutil
+rich
+requests
+pywinauto
